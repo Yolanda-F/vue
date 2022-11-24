@@ -1,5 +1,5 @@
 <template>
-  <div>{{ store.count }}</div>
+  <router-view />
 </template>
 
 <script setup>
