@@ -2,7 +2,13 @@
 <template>
   <el-container class="login-container">
     <div class="login-div">
-      <el-form :model="form" ref="formRef" :rules="rules" label-width="0" hide-required-asterisk>
+      <el-form
+        :model="form"
+        ref="formRef"
+        :rules="rules"
+        label-width="0"
+        hide-required-asterisk
+      >
         <el-form-item>
           <span class="login-title">{{ title }}</span>
         </el-form-item>
@@ -10,10 +16,16 @@
           <el-input v-model="form.userName" :prefix-icon="User" />
         </el-form-item>
         <el-form-item prop="passWord">
-          <el-input v-model="form.passWord" type="password" :prefix-icon="Lock" />
+          <el-input
+            v-model="form.passWord"
+            type="password"
+            :prefix-icon="Lock"
+          />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" class="login-button" @click="handleLoginIn">登录</el-button>
+          <el-button type="primary" class="login-button" @click="handleLoginIn"
+            >登录</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
@@ -22,13 +34,15 @@
 
 <script setup>
 import { reactive, ref } from "vue";
+import { useRouter } from "vue-router";
 import { User, Lock } from "@element-plus/icons-vue";
 
 const title = "xxx系统";
+const router = useRouter();
 const formRef = ref();
 const form = reactive({
   userName: "admin",
-  passWord: "",
+  passWord: "123456",
 });
 const rules = reactive({
   userName: [
@@ -50,7 +64,8 @@ const rules = reactive({
 const handleLoginIn = () => {
   formRef.value.validate((valid) => {
     if (valid) {
-      console.log(form);
+      // console.log(form);
+      router.push("/main");
     } else {
       return false;
     }
