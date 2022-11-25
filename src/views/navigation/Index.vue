@@ -1,12 +1,46 @@
 <!-- 主页面导航 -->
 <template>
   <el-container class="menu-container">
-    <el-aside width="200px" class="menu-aside">
+    <el-aside class="menu-aside">
       <div class="menu-header"></div>
-      <NavMenu></NavMenu>
+      <NavMenu ref="menuRef"></NavMenu>
     </el-aside>
-    <el-container>
-      <el-header class="menu-main-header"></el-header>
+    <el-container class="menu-main-container">
+      <el-header class="menu-main-header">
+        <el-row class="menu-main-row">
+          <el-col :span="1">
+            <el-icon
+              v-if="!isExpand"
+              @click="handleExpandOrFold"
+              :size="iconSize"
+              class="expand-icon"
+            >
+              <Expand />
+            </el-icon>
+            <el-icon
+              v-else
+              @click="handleExpandOrFold"
+              :size="iconSize"
+              class="expand-icon"
+            >
+              <Fold />
+            </el-icon>
+          </el-col>
+          <el-col :span="2" :offset="21">
+            <el-dropdown @command="handleCommand">
+              <el-avatar :icon="UserFilled" size="small"></el-avatar>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item command="center">个人中心</el-dropdown-item>
+                  <el-dropdown-item divided command="exit"
+                    >退出登录</el-dropdown-item
+                  >
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </el-col>
+        </el-row>
+      </el-header>
       <el-main>
         <router-view />
       </el-main>
@@ -15,7 +49,39 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
 import NavMenu from "./NavMenu.vue";
+import { Expand, Fold, UserFilled } from "@element-plus/icons-vue";
+import { useRouter } from "vue-router";
+import { ElMessageBox } from "element-plus";
+
+const router = useRouter();
+const menuRef = ref("");
+const iconSize = ref(18);
+let isExpand = ref(true); //菜单是否展开
+
+//控制子组件折叠或展开菜单
+const handleExpandOrFold = () => {
+  isExpand.value = !isExpand.value;
+  menuRef.value.handleCollapse(!isExpand.value);
+};
+//点击菜单项,头像处的下拉菜单
+const handleCommand = (value) => {
+  if (value == "exit") {
+    ElMessageBox.confirm("确定退出系统", "提示", {
+      cancelButtonText: "取消",
+      confirmButtonText: "确认",
+      closeOnClickModal: false,
+      closeOnPressEscape: false,
+      autofocus: false,
+      type: "warning",
+    }).then(() => {
+      router.push("/");
+    });
+  } else if (value == "center") {
+    router.push("/center");
+  }
+};
 </script>
 
 <style lang="less" scoped>
@@ -23,15 +89,37 @@ import NavMenu from "./NavMenu.vue";
   height: 100%;
 }
 
-.menu-aside {
-  background-color: #304156;
-}
+.menu-container {
+  --el-aside-width: auto;
 
-.menu-header {
-  height: 60px;
-}
+  .menu-aside {
+    background-color: #304156;
 
-.menu-main-header {
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 12%), 0 0 3px 0 rgb(0 0 0 / 4%);
+    .menu-header {
+      height: 60px;
+    }
+  }
+
+  .menu-main-container {
+    width: calc(100% - var(--el-aside-width));
+  }
+
+  .menu-main-header {
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 12%), 0 0 3px 0 rgb(0 0 0 / 4%);
+    .expand-icon:hover {
+      color: var(--el-color-primary);
+      cursor: pointer;
+    }
+    .menu-main-row {
+      height: 100%;
+      width: 100%;
+      .el-col {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
 }
 </style>

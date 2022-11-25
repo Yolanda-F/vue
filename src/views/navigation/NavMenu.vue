@@ -1,8 +1,17 @@
 <!-- 导航菜单 -->
 <template>
-  <el-menu class="nav-menu" :router="true" :default-active="activeIndex">
+  <el-menu
+    class="nav-menu"
+    :router="true"
+    :default-active="activeIndex"
+    :collapse="isCollapse"
+  >
     <template v-for="item in menuItem" :key="item.index">
-      <el-sub-menu :index="item.index" v-if="item.children">
+      <el-sub-menu
+        :index="item.index"
+        v-if="item.children"
+        popper-class="menu-popper"
+      >
         <template #title>
           <el-icon>
             <component :is="item.icon" class="menu-icon"></component>
@@ -17,21 +26,21 @@
           <el-icon>
             <component :is="child.icon" class="menu-icon"></component>
           </el-icon>
-          <span>{{ child.label }}</span>
+          <template #title>{{ child.label }}</template>
         </el-menu-item>
       </el-sub-menu>
       <el-menu-item :index="item.index" v-else>
         <el-icon>
           <component :is="item.icon" class="menu-icon"></component>
         </el-icon>
-        <span>{{ item.label }}</span>
+        <template #title>{{ item.label }}</template>
       </el-menu-item>
     </template>
   </el-menu>
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, defineExpose } from "vue";
 import {
   Setting,
   User,
@@ -41,6 +50,7 @@ import {
   List,
 } from "@element-plus/icons-vue";
 
+//菜单项
 const menuItem = reactive([
   {
     index: "system",
@@ -56,10 +66,18 @@ const menuItem = reactive([
   { index: "file", label: "文件管理", icon: Document },
 ]);
 const activeIndex = ref("user"); //默认选中项索引
+let isCollapse = ref(false); //是否折叠
+
+//设置菜单折叠状态
+const handleCollapse = (value) => {
+  isCollapse.value = value;
+};
+defineExpose({ handleCollapse }); //暴露函数
 </script>
 
 <style lang="less">
 .nav-menu {
+  // width: 200px;
   --el-menu-bg-color: transparent;
   --el-menu-text-color: #fff;
   height: calc(100% - 60px);
