@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { User, Lock } from "@element-plus/icons-vue";
 
@@ -42,7 +42,7 @@ const router = useRouter();
 const formRef = ref();
 const form = reactive({
   userName: "admin",
-  passWord: "123456",
+  passWord: "123",
 });
 const rules = reactive({
   userName: [
@@ -71,6 +71,18 @@ const handleLoginIn = () => {
     }
   });
 };
+
+//回车登录
+onMounted(() => {
+  document.onkeydown = (e) => {
+    if (e.defaultPrevented) {
+      return;
+    }
+    if (e.keyCode === 13 && e.target.baseURI.endsWith("/#/")) {
+      handleLoginIn();
+    }
+  };
+});
 </script>
 
 <style lang="less" scoped>
