@@ -104,4 +104,13 @@ defineExpose({ handleCollapse }); //暴露函数
     width: 100%;
   }
 }
+.menu-popper {
+  .el-menu {
+    --el-menu-bg-color: #304156;
+    --el-menu-text-color: #fff;
+    .el-menu-item:hover {
+      background-color: #263445 !important;
+    }
+  }
+}
 </style>
