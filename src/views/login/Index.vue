@@ -36,7 +36,9 @@
 import { reactive, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { User, Lock } from "@element-plus/icons-vue";
+import { useStore } from "@/store/index";
 
+const store = useStore();
 const title = "xxx系统";
 const router = useRouter();
 const formRef = ref();
@@ -64,7 +66,7 @@ const rules = reactive({
 const handleLoginIn = () => {
   formRef.value.validate((valid) => {
     if (valid) {
-      // console.log(form);
+      store.userName = form.userName; //记录用户名
       router.push("/main");
     } else {
       return false;

@@ -26,9 +26,19 @@
               <Fold />
             </el-icon>
           </el-col>
-          <el-col :span="2" :offset="21">
+          <el-col :span="1" :offset="20">
+            <el-icon :size="iconSize" class="expand-icon">
+              <Bell />
+            </el-icon>
+          </el-col>
+          <el-col :span="2">
             <el-dropdown @command="handleCommand">
-              <el-avatar :icon="UserFilled" size="small"></el-avatar>
+              <span>
+                <el-avatar>{{ store.userName }}</el-avatar>
+                <el-icon>
+                  <ArrowDown />
+                </el-icon>
+              </span>
               <template #dropdown>
                 <el-dropdown-menu>
                   <el-dropdown-item command="center">个人中心</el-dropdown-item>
@@ -51,10 +61,12 @@
 <script setup>
 import { ref } from "vue";
 import NavMenu from "./NavMenu.vue";
-import { Expand, Fold, UserFilled } from "@element-plus/icons-vue";
+import { ArrowDown, Bell, Expand, Fold } from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
 import { ElMessageBox } from "element-plus";
+import { useStore } from "@/store/index";
 
+const store = useStore();
 const router = useRouter();
 const menuRef = ref("");
 const iconSize = ref(18);
@@ -70,7 +82,7 @@ const handleCommand = (value) => {
   if (value == "exit") {
     ElMessageBox.confirm("确定退出系统", "提示", {
       cancelButtonText: "取消",
-      confirmButtonText: "确认",
+      confirmButtonText: "确定",
       closeOnClickModal: false,
       closeOnPressEscape: false,
       autofocus: false,
@@ -82,6 +94,7 @@ const handleCommand = (value) => {
     router.push("/center");
   }
 };
+router.push("/main");
 </script>
 
 <style lang="less" scoped>
@@ -105,6 +118,7 @@ const handleCommand = (value) => {
   }
 
   .menu-main-header {
+    --el-header-padding: 0;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 12%), 0 0 3px 0 rgb(0 0 0 / 4%);
     .expand-icon:hover {
       color: var(--el-color-primary);
@@ -121,5 +135,8 @@ const handleCommand = (value) => {
       }
     }
   }
+}
+.el-avatar {
+  --el-avatar-bg-color: var(--el-color-primary);
 }
 </style>

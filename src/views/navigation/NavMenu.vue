@@ -5,6 +5,7 @@
     :router="true"
     :default-active="activeIndex"
     :collapse="isCollapse"
+    unique-opened
   >
     <template v-for="item in menuItem" :key="item.index">
       <el-sub-menu
@@ -18,23 +19,23 @@
           </el-icon>
           <span>{{ item.label }}</span>
         </template>
-        <el-menu-item
-          v-for="child in item.children"
-          :key="child.index"
-          :index="child.index"
-        >
-          <el-icon>
-            <component :is="child.icon" class="menu-icon"></component>
-          </el-icon>
-          <template #title>{{ child.label }}</template>
-        </el-menu-item>
+        <template v-for="child in item.children" :key="child.index">
+          <el-menu-item :index="child.index">
+            <el-icon>
+              <component :is="child.icon" class="menu-icon"></component>
+            </el-icon>
+            <template #title>{{ child.label }}</template>
+          </el-menu-item>
+        </template>
       </el-sub-menu>
-      <el-menu-item :index="item.index" v-else>
-        <el-icon>
-          <component :is="item.icon" class="menu-icon"></component>
-        </el-icon>
-        <template #title>{{ item.label }}</template>
-      </el-menu-item>
+      <template v-else>
+        <el-menu-item :index="item.index">
+          <el-icon>
+            <component :is="item.icon" class="menu-icon"></component>
+          </el-icon>
+          <template #title>{{ item.label }}</template>
+        </el-menu-item>
+      </template>
     </template>
   </el-menu>
 </template>
@@ -48,10 +49,12 @@ import {
   Document,
   Grid,
   List,
+  HomeFilled,
 } from "@element-plus/icons-vue";
 
 //菜单项
 const menuItem = reactive([
+  { index: "home", label: "首页", icon: HomeFilled },
   {
     index: "system",
     label: "系统管理",
@@ -65,7 +68,7 @@ const menuItem = reactive([
   },
   { index: "file", label: "文件管理", icon: Document },
 ]);
-const activeIndex = ref("user"); //默认选中项索引
+const activeIndex = ref("home"); //默认选中项索引
 let isCollapse = ref(false); //是否折叠
 
 //设置菜单折叠状态
@@ -77,7 +80,7 @@ defineExpose({ handleCollapse }); //暴露函数
 
 <style lang="less">
 .nav-menu {
-  // width: 200px;
+  width: 200px;
   --el-menu-bg-color: transparent;
   --el-menu-text-color: #fff;
   height: calc(100% - 60px);
