@@ -1,9 +1,13 @@
 <template>
-  <router-view />
+  <el-config-provider :locale="locale">
+    <router-view />
+  </el-config-provider>
 </template>
 
 <script setup>
-import { useStore } from "@/store/index";
+import { ElConfigProvider } from "element-plus";
+import { ref } from "vue";
+import zhCn from "element-plus/dist/locale/zh-cn.mjs";
 
-const store = useStore();
+let locale = ref(zhCn);
 </script>
