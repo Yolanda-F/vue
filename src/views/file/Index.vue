@@ -75,6 +75,15 @@
             </template>
           </el-table-column>
         </el-table>
+        <el-pagination
+          v-model:current-page="currentPage"
+          v-model:page-size="pageSize"
+          :page-sizes="[10, 20, 30, 40]"
+          layout="total, sizes, prev, pager, next"
+          :total="total"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
       </el-card>
     </div>
   </div>
@@ -100,6 +109,9 @@ const tableColumns = reactive([
   { prop: "createTime", label: "创建日期" },
   { prop: "description", label: "文件描述" },
 ]);
+let currentPage = ref(1); //当前页
+let pageSize = ref(10); //当前页数量
+let total = ref(0);
 //搜索
 const handleSearch = () => {
   console.log(fileName, fileDate);
@@ -137,6 +149,16 @@ const handleDeleteFile = (row) => {
 const handleDownloadFile = (row) => {
   console.log("download file", row);
 };
+//改变每页数量
+const handleSizeChange = (size) => {
+  console.log(size);
+  pageSize.value = size;
+};
+//改变当前页
+const handleCurrentChange = (page) => {
+  console.log(page);
+  currentPage.value = page;
+};
 //获取表格数据
 const getFileList = () => {
   fileData.length = 0;
@@ -149,6 +171,7 @@ const getFileList = () => {
       description: "这是一个文件",
     });
   }
+  total.value = fileData.length;
 };
 onMounted(() => {
   getFileList();
@@ -193,8 +216,8 @@ onMounted(() => {
     box-sizing: border-box;
   }
 }
-.el-table {
-  height: 100%;
+:deep(.el-table) {
+  height: calc(100% - 32px);
   .cell {
     text-align: center;
   }
