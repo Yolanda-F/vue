@@ -80,6 +80,7 @@ onMounted(() => {
     if (e.defaultPrevented) {
       return;
     }
+    console.log(e.target.baseURI);
     if (e.keyCode === 13 && e.target.baseURI.endsWith("/#/")) {
       handleLoginIn();
     }
