@@ -1,14 +1,16 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+import piniaPluginPersist from "pinia-plugin-persist"; //pinia持久化
 import App from "./App.vue";
-import router from "./router/index";
+import router from "./router/router";
+import "./router/index";
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 import axios from "axios";
 import { ElMessage } from "element-plus";
 
 const app = createApp(App);
-app.use(createPinia());
+app.use(createPinia().use(piniaPluginPersist));
 app.use(router);
 app.use(ElementPlus);
 

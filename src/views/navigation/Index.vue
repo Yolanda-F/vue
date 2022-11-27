@@ -94,7 +94,6 @@ const handleCommand = (value) => {
     router.push("/center");
   }
 };
-router.push("/main");
 </script>
 
 <style lang="less" scoped>
