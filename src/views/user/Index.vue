@@ -1,42 +1,38 @@
 <!-- 用户管理 -->
 <template>
   <el-row>
-    <el-col
-      ><div class="search">
-        <el-input
-          v-model="data.search"
-          placeholder="请输入"
-          :prefix-icon="Search"
-        />
-        <el-button type="primary" :icon="Search">搜索</el-button>
-        <el-button type="warning" :icon="RefreshRight">重置</el-button>
-      </div></el-col
-    >
     <el-col>
-      <div class="operation">
-        <el-button type="primary" :icon="Plus">新增</el-button>
-        <el-button
-          type="danger"
-          :icon="Delete"
-          :disabled="multipleSelection.length > 0 ? false : true"
-          >删除</el-button
-        >
-      </div></el-col
-    >
+      <el-input
+        v-model="searchText"
+        placeholder="请输入"
+        :prefix-icon="Search"
+      />
+      <el-button type="primary" :icon="Search">搜索</el-button>
+      <el-button type="warning" :icon="RefreshRight">重置</el-button>
+    </el-col>
+    <el-col>
+      <el-button type="primary" :icon="Plus" class="margin-div">新增</el-button>
+      <el-button
+        type="danger"
+        :icon="Delete"
+        :disabled="multipleSelection.length > 0 ? false : true"
+        class="margin-div"
+        >删除</el-button
+      >
+    </el-col>
     <el-col
       ><el-table
-        :data="data.tableData"
+        :data="tableData"
         style="width: 100%"
-        :header-cell-style="{ 'text-align': 'center' }"
-        :cell-style="{ 'text-align': 'center' }"
         @selection-change="handleSelectionChange"
+        class="margin-div"
       >
         <el-table-column type="selection" width="55" />
         <el-table-column
           v-for="item in userTableData"
           :prop="item.prop"
           :label="item.label"
-          width="item.width"
+          :aria-current="item.width"
           :key="item.name"
         >
           <template #default="scope" v-if="item.prop == 'state'">
@@ -54,28 +50,22 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        v-model:current-page="currentPage"
+        v-model:page-size="pageSize"
+        :page-sizes="[10, 20, 30, 40]"
+        layout="total, sizes, prev, pager, next"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </el-col>
-    <el-col>
-      <div class="demo-pagination-block">
-        <el-pagination
-          v-model:current-page="currentPage2"
-          v-model:page-size="pageSize2"
-          :page-sizes="[10, 15, 20]"
-          :small="small"
-          :disabled="disabled"
-          :background="background"
-          layout="sizes, prev, pager, next"
-          :total="100"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        /></div
-    ></el-col>
   </el-row>
 </template>
 
 <script setup>
 import { reactive, ref } from "vue";
-import { userTableData } from "../../utill/systenTableData";
+import { userTableData } from "@/utill/user";
 import {
   RefreshRight,
   Search,
@@ -83,28 +73,28 @@ import {
   Delete,
   EditPen,
 } from "@element-plus/icons-vue";
-const data = reactive({
-  search: "",
-  tableData: [
-    {
-      date: "2016-05-03",
-      name: "Tom",
-      state: true,
-      phone: "123456",
-      department: "No. 189, Grove St, Los Angeles",
-      mail: "123@163.com",
-      gender: "male",
-    },
-  ],
-});
+
+let searchText = ref("");
+let tableData = reactive([
+  {
+    date: "2016-05-03",
+    name: "Tom",
+    state: true,
+    phone: "123456",
+    department: "No. 189, Grove St, Los Angeles",
+    mail: "123@163.com",
+    gender: "male",
+  },
+]);
 const multipleSelection = ref([]);
+//分页
+const currentPage = ref(1);
+const pageSize = ref(10);
+let total = ref(1);
+
 const handleSelectionChange = (val) => {
   multipleSelection.value = val;
 };
-//分页
-const currentPage2 = ref(1);
-
-const pageSize2 = ref(10);
 const handleClick = () => {
   console.log("click");
 };
@@ -116,27 +106,12 @@ const handleCurrentChange = (val) => {
 };
 </script>
 <style scoped lang="less">
-.el-row {
-  height: 100%;
+.el-input {
+  width: auto;
+  margin-right: 12px;
 }
-.search {
-  width: 100%;
-
-  .el-input {
-    width: auto;
-    margin-right: 15px;
-  }
-  ::v-deep .table-operation {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
-}
-.el-col {
-  margin-bottom: 20px;
-}
-
-.el-table {
-  text-align: center;
+.margin-div {
+  margin-top: 12px;
+  margin-bottom: 12px;
 }
 </style>
