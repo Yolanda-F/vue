@@ -91,7 +91,7 @@ onMounted(() => {
 .login-container {
   height: 100%;
   width: 100%;
-  background: url("@/assets/bg1.jpg") no-repeat;
+  background: url("@/assets/image/bg1.jpg") no-repeat;
   background-size: 100% 100%;
   display: flex;
   align-items: center;

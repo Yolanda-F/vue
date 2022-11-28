@@ -29,6 +29,7 @@
         :icon="Delete"
         :disabled="currentSelect.length == 0"
         @click="handleDelete"
+        v-permission="Permission.admin"
         >删除</el-button
       >
       <el-button
@@ -69,7 +70,11 @@
                 @confirm="handleDeleteFile(scope.row)"
               >
                 <template #reference>
-                  <el-button type="danger" :icon="Delete"></el-button>
+                  <el-button
+                    type="danger"
+                    :icon="Delete"
+                    v-permission="Permission.admin"
+                  ></el-button>
                 </template>
               </el-popconfirm>
             </template>
@@ -87,6 +92,7 @@
       </el-card>
     </div>
   </div>
+  <UploadFile ref="uploadRef"></UploadFile>
 </template>
 
 <script setup>
@@ -97,21 +103,21 @@ import {
   Download,
   Delete,
 } from "@element-plus/icons-vue";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, computed } from "vue";
+import { Permission } from "@/utill/permission";
+import { TableColumns } from "@/utill/file";
+import { ElMessageBox } from "element-plus";
+import UploadFile from "./UploadFile.vue";
 
 let fileName = ref(""); //要搜索的文件名称或描述
 let fileDate = ref(""); //搜索的文件日期
 let fileData = reactive([]); //文件列表数据
 let currentSelect = reactive([]); //当前选择的行
-const tableColumns = reactive([
-  { prop: "fileName", label: "文件名称" },
-  { prop: "creator", label: "创建人" },
-  { prop: "createTime", label: "创建日期" },
-  { prop: "description", label: "文件描述" },
-]);
 let currentPage = ref(1); //当前页
 let pageSize = ref(10); //当前页数量
 let total = ref(0);
+let uploadRef = ref();
+
 //搜索
 const handleSearch = () => {
   console.log(fileName, fileDate);
@@ -131,11 +137,20 @@ const handleSelect = (selection, row) => {
 };
 //上传文件
 const handleUpload = () => {
-  console.log("上传");
+  uploadRef.value.dialogVisibile = true;
 };
 //批量删除
 const handleDelete = () => {
-  console.log("delete");
+  ElMessageBox.confirm("确定删除选择的文件", "提示", {
+    cancelButtonText: "取消",
+    confirmButtonText: "确认",
+    closeOnClickModal: false,
+    closeOnPressEscape: false,
+    autofocus: false,
+    type: "warning",
+  }).then(() => {
+    console.log("要删除的文件", currentSelect);
+  });
 };
 //批量下载
 const handleDownload = () => {
@@ -173,6 +188,10 @@ const getFileList = () => {
   }
   total.value = fileData.length;
 };
+//过滤出要展示的列
+const tableColumns = computed(() => {
+  return TableColumns.filter((column) => column.isColumn);
+});
 onMounted(() => {
   getFileList();
 });
