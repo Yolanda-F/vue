@@ -10,6 +10,8 @@ import axios from "axios";
 import { ElMessage } from "element-plus";
 import { permission } from "./directive/permission";
 
+import "@/assets/style/index.less";
+
 const app = createApp(App);
 app.use(createPinia().use(piniaPluginPersist));
 app.use(router);
