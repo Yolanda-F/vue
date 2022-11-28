@@ -34,17 +34,17 @@
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="55" />
-          <el-table-column prop="name" label="昵称" width="150" />
-          <el-table-column prop="gender" label="性别" width="120" />
-          <el-table-column prop="phone" label="电话" width="120" />
-          <el-table-column prop="mail" label="邮箱" width="150" />
-          <el-table-column prop="department" label="部门" width="400" />
-          <el-table-column prop="state" label="状态" width="120">
-            <template #default="scope">
+          <el-table-column
+            v-for="item in userTableData"
+            :prop="item.prop"
+            :label="item.label"
+            width="item.width"
+            :key="item.name"
+          >
+            <template #default="scope" v-if="item.prop == 'state'">
               <el-switch v-model="scope.row.state" />
             </template>
           </el-table-column>
-          <el-table-column prop="date" label="创建日期" width="120" />
           <el-table-column fixed="right" label="操作" width="200">
             <template #default>
               <el-button
@@ -78,6 +78,7 @@
 
 <script setup>
 import { reactive, ref } from "vue";
+import { userTableData } from "../../utill/systenTableData";
 import {
   RefreshRight,
   Search,
@@ -118,11 +119,14 @@ const handleCurrentChange = (val) => {
 };
 </script>
 <style scoped lang="less">
+.el-row {
+  height: 100%;
+}
 .search {
   width: 100%;
 
   .el-input {
-    width: 60%;
+    width: auto;
     margin-right: 15px;
   }
   ::v-deep .table-operation {
