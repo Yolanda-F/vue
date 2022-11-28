@@ -9,13 +9,17 @@ export const useStore = defineStore("index", {
         key: "userName",
         paths: ["userName"],
       },
+      {
+        key: "activeMenu",
+        paths: ["activeMenu"],
+      },
     ],
   },
   state: () => {
     return {
       userName: "", //用户名
       roles: [], //用户角色
-      count: 1,
+      activeMenu: "home",
     };
   },
   actions: {},
