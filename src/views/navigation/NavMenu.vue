@@ -6,6 +6,7 @@
     :default-active="activeIndex"
     :collapse="isCollapse"
     unique-opened
+    @select="handleSelect"
   >
     <template v-for="item in MenuItems" :key="item.index">
       <el-sub-menu
@@ -41,16 +42,25 @@
 </template>
 
 <script setup>
-import { ref, defineExpose } from "vue";
+import { ref, defineExpose, computed } from "vue";
 import { MenuItems } from "@/utill/menu";
+import { useStore } from "@/store/index";
 
-const activeIndex = ref("home"); //默认选中项索引
+const store = useStore();
+// const activeIndex = ref("home"); //默认选中项索引
 let isCollapse = ref(false); //是否折叠
 
 //设置菜单折叠状态
 const handleCollapse = (value) => {
   isCollapse.value = value;
 };
+//点击菜单项
+const handleSelect = (index) => {
+  store.activeMenu = index;
+};
+const activeIndex = computed(() => {
+  return store.activeMenu;
+});
 defineExpose({ handleCollapse }); //暴露函数
 </script>
 
