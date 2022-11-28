@@ -15,7 +15,9 @@
     "less-loader": "^11.1.0",
     "pinia": "^2.0.25",
     "pinia-plugin-persist": "^1.0.0",
+    "tinymce": "^6.3.0",
     "vue": "^3.2.13",
+    "vue-quill-editor": "^3.0.6",
     "vue-router": "^4.0.3"
   },
   "devDependencies": {
