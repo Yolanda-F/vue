@@ -8,11 +8,15 @@ import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 import axios from "axios";
 import { ElMessage } from "element-plus";
+import { permission } from "./directive/permission";
 
 const app = createApp(App);
 app.use(createPinia().use(piniaPluginPersist));
 app.use(router);
 app.use(ElementPlus);
+
+//自定义指令
+app.directive("permission", permission);
 
 axios.defaults.baseURL = "";
 app.config.globalProperties.$http = axios;

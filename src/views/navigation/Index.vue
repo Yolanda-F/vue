@@ -82,7 +82,7 @@ const handleCommand = (value) => {
   if (value == "exit") {
     ElMessageBox.confirm("确定退出系统", "提示", {
       cancelButtonText: "取消",
-      confirmButtonText: "确定",
+      confirmButtonText: "确认",
       closeOnClickModal: false,
       closeOnPressEscape: false,
       autofocus: false,

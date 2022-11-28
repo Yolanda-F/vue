@@ -7,7 +7,7 @@
     :collapse="isCollapse"
     unique-opened
   >
-    <template v-for="item in menuItem" :key="item.index">
+    <template v-for="item in MenuItems" :key="item.index">
       <el-sub-menu
         :index="item.index"
         v-if="item.children"
@@ -20,7 +20,7 @@
           <span>{{ item.label }}</span>
         </template>
         <template v-for="child in item.children" :key="child.index">
-          <el-menu-item :index="child.index">
+          <el-menu-item :index="child.index" v-permission="child.permission">
             <el-icon>
               <component :is="child.icon" class="menu-icon"></component>
             </el-icon>
@@ -29,7 +29,7 @@
         </template>
       </el-sub-menu>
       <template v-else>
-        <el-menu-item :index="item.index">
+        <el-menu-item :index="item.index" v-permission="item.permission">
           <el-icon>
             <component :is="item.icon" class="menu-icon"></component>
           </el-icon>
@@ -41,33 +41,9 @@
 </template>
 
 <script setup>
-import { reactive, ref, defineExpose } from "vue";
-import {
-  Setting,
-  User,
-  Avatar,
-  Document,
-  Grid,
-  List,
-  HomeFilled,
-} from "@element-plus/icons-vue";
+import { ref, defineExpose } from "vue";
+import { MenuItems } from "@/utill/menu";
 
-//菜单项
-const menuItem = reactive([
-  { index: "home", label: "首页", icon: HomeFilled },
-  {
-    index: "system",
-    label: "系统管理",
-    icon: Setting,
-    children: [
-      { index: "user", label: "用户管理", icon: User },
-      { index: "role", label: "角色管理", icon: Avatar },
-      { index: "department", label: "部门管理", icon: Grid },
-      { index: "post", label: "岗位管理", icon: List },
-    ],
-  },
-  { index: "file", label: "文件管理", icon: Document },
-]);
 const activeIndex = ref("home"); //默认选中项索引
 let isCollapse = ref(false); //是否折叠
 
