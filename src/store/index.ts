@@ -13,6 +13,10 @@ export const useStore = defineStore("index", {
         key: "activeMenu",
         paths: ["activeMenu"],
       },
+      {
+        key: "roles",
+        paths: ["roles"],
+      },
     ],
   },
   state: () => {
@@ -24,5 +28,12 @@ export const useStore = defineStore("index", {
       userDialogVisible: false, //弹窗是否显示
     };
   },
-  actions: {},
+  actions: {
+    //清空变量
+    clearStore() {
+      this.userName = "";
+      this.roles = [];
+      this.activeMenu = "home";
+    },
+  },
 });

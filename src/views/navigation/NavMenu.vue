@@ -47,7 +47,6 @@ import { MenuItems } from "@/utill/menu";
 import { useStore } from "@/store/index";
 
 const store = useStore();
-// const activeIndex = ref("home"); //默认选中项索引
 let isCollapse = ref(false); //是否折叠
 
 //设置菜单折叠状态

@@ -84,6 +84,7 @@ onMounted(() => {
       handleLoginIn();
     }
   };
+  store.clearStore();
 });
 </script>
 

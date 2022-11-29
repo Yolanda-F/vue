@@ -20,25 +20,14 @@
         @click="addUser()"
         >新增</el-button
       >
-      <el-popconfirm
-        confirm-button-text="确认"
-        cancel-button-text="取消"
-        :icon="InfoFilled"
-        icon-color="#626AEF"
-        title="是否删除本条数据?"
-        @confirm="confirmEvent"
-        @cancel="cancelEvent"
+      <el-button
+        type="danger"
+        :icon="Delete"
+        :disabled="multipleSelection.length > 0 ? false : true"
+        class="margin-div"
+        @click="handleDeleteUsers"
+        >删除</el-button
       >
-        <template #reference>
-          <el-button
-            type="danger"
-            :icon="Delete"
-            :disabled="multipleSelection.length > 0 ? false : true"
-            class="margin-div"
-            >删除</el-button
-          >
-        </template>
-      </el-popconfirm>
     </el-col>
     <el-col class="margin-div">
       <el-card header="用户列表">
@@ -53,7 +42,7 @@
             :prop="item.prop"
             :label="item.label"
             :aria-current="item.width"
-            :key="item.name"
+            :key="item.prop"
           >
             <template #default="scope" v-if="item.prop == 'state'">
               <el-switch v-model="scope.row.state" />
@@ -66,19 +55,11 @@
                 :icon="EditPen"
                 @click="editUser(scope.row)"
               ></el-button>
-              <el-popconfirm
-                confirm-button-text="确认"
-                cancel-button-text="取消"
-                :icon="InfoFilled"
-                icon-color="#626AEF"
-                title="是否删除本条数据?"
-                @confirm="tableConfirmEvent(scope.row)"
-                @cancel="tableCancelEvent"
-              >
-                <template #reference>
-                  <el-button type="danger" :icon="Delete"></el-button>
-                </template>
-              </el-popconfirm>
+              <el-button
+                type="danger"
+                :icon="Delete"
+                @click="deleteUser(scope.row)"
+              ></el-button>
               <el-button type="success" :icon="ChatDotRound"></el-button>
             </template>
           </el-table-column>
@@ -107,15 +88,12 @@ import {
   Plus,
   Delete,
   EditPen,
-  InfoFilled,
   ChatDotRound,
 } from "@element-plus/icons-vue";
-import { ElMessage } from "element-plus";
-// import { useRouter } from "vue-router";
+import { ElMessageBox } from "element-plus";
 import { useStore } from "@/store/index";
 import OperationUser from "./OperationUser.vue";
 const store = useStore();
-// const router = useRouter();
 let searchText = ref("");
 //当前表格的列
 const currentColumn = reactive([]);
@@ -139,6 +117,7 @@ const currentPage = ref(1);
 const pageSize = ref(10);
 let total = ref(1);
 
+//选择行
 const handleSelectionChange = (val) => {
   multipleSelection.value = val;
 };
@@ -152,6 +131,7 @@ const editUser = (row) => {
 const handleSizeChange = (val) => {
   console.log(`${val} items per page`);
 };
+//改变当前页
 const handleCurrentChange = (val) => {
   console.log(`current page: ${val}`);
 };
@@ -161,27 +141,33 @@ const addUser = () => {
   store.userDialogTips = "新增用户";
   store.userDialogVisible = true;
 };
-//表格外删除时的确认和取消
-const confirmEvent = () => {
-  ElMessage({
-    message: "删除成功.",
-    type: "success",
+//删除多个用户
+const handleDeleteUsers = () => {
+  ElMessageBox.confirm("确定删除选择的用户", "提示", {
+    cancelButtonText: "取消",
+    confirmButtonText: "确认",
+    closeOnClickModal: false,
+    closeOnPressEscape: false,
+    autofocus: false,
+    type: "warning",
+  }).then(() => {
+    console.log(multipleSelection.value);
   });
 };
-const cancelEvent = () => {
-  console.log("cancel!");
-};
-//表格内的删除按钮的确认于取消
-const tableConfirmEvent = (row) => {
-  console.log(row);
-  ElMessage({
-    message: "删除成功.",
-    type: "success",
+//删除一个用户
+const deleteUser = (row) => {
+  ElMessageBox.confirm("确定删除选择的用户", "提示", {
+    cancelButtonText: "取消",
+    confirmButtonText: "确认",
+    closeOnClickModal: false,
+    closeOnPressEscape: false,
+    autofocus: false,
+    type: "warning",
+  }).then(() => {
+    console.log(row);
   });
 };
-const tableCancelEvent = () => {
-  console.log("cancel!");
-};
+//表格内的删除按钮
 onMounted(() => {
   currentColumn.length = 0;
   userTableData.forEach((column) => {
@@ -199,6 +185,5 @@ onMounted(() => {
 }
 .margin-div {
   margin-top: 12px;
-  // margin-bottom: 12px;
 }
 </style>

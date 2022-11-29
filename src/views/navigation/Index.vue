@@ -88,6 +88,7 @@ const handleCommand = (value) => {
       autofocus: false,
       type: "warning",
     }).then(() => {
+      store.clearStore(); //清空变量值
       router.push("/");
     });
   } else if (value == "center") {
