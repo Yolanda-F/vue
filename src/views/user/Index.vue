@@ -45,7 +45,7 @@
               <el-button
                 type="primary"
                 :icon="EditPen"
-                @click="handleClick()"
+                @click="handleEdit()"
               ></el-button>
               <el-popconfirm
                 confirm-button-text="确认"
@@ -106,15 +106,19 @@ const currentPage = ref(1);
 const pageSize = ref(10);
 let total = ref(1);
 
+//选择行
 const handleSelectionChange = (val) => {
   multipleSelection.value = val;
 };
-const handleClick = () => {
+//编辑
+const handleEdit = () => {
   console.log("click");
 };
+//改变页数量
 const handleSizeChange = (val) => {
   console.log(`${val} items per page`);
 };
+//改变当前页
 const handleCurrentChange = (val) => {
   console.log(`current page: ${val}`);
 };
@@ -131,7 +135,7 @@ const handleDeleteUsers = () => {
     console.log(multipleSelection.value);
   });
 };
-//表格内的删除按钮的确认于取消
+//表格内的删除按钮
 const handleDelete = (row) => {
   console.log(row);
 };
@@ -143,6 +147,5 @@ const handleDelete = (row) => {
 }
 .margin-div {
   margin-top: 12px;
-  // margin-bottom: 12px;
 }
 </style>
