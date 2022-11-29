@@ -1,8 +1,8 @@
 <!-- 文件管理 -->
 <template>
-  <div class="file-manage">
+  <el-row>
     <!-- 搜索区域 -->
-    <div class="search-area">
+    <el-col class="search-col">
       <el-input placeholder="输入名称或者描述搜索" v-model="fileName" />
       <el-date-picker
         v-model="fileDate"
@@ -18,10 +18,14 @@
       <el-button type="warning" :icon="RefreshLeft" @click="handleReset"
         >重置</el-button
       >
-    </div>
+    </el-col>
     <!-- 操作区域 -->
-    <div class="operation-area">
-      <el-button type="primary" :icon="Upload" @click="handleUpload"
+    <el-col>
+      <el-button
+        type="primary"
+        :icon="Upload"
+        @click="handleUpload"
+        class="margin-div"
         >上传</el-button
       >
       <el-button
@@ -30,6 +34,7 @@
         :disabled="currentSelect.length == 0"
         @click="handleDelete"
         v-permission="Permission.admin"
+        class="margin-div"
         >删除</el-button
       >
       <el-button
@@ -37,11 +42,12 @@
         :icon="Download"
         :disabled="currentSelect.length == 0"
         @click="handleDownload"
+        class="margin-div"
         >下载</el-button
       >
-    </div>
+    </el-col>
     <!-- 数据区域 -->
-    <div class="data-area">
+    <el-col class="margin-div">
       <el-card header="文件列表">
         <el-table
           :data="fileData"
@@ -90,8 +96,8 @@
           @current-change="handleCurrentChange"
         />
       </el-card>
-    </div>
-  </div>
+    </el-col>
+  </el-row>
   <UploadFile ref="uploadRef"></UploadFile>
 </template>
 
@@ -198,44 +204,19 @@ onMounted(() => {
 </script>
 
 <style lang="less" scoped>
-.file-manage {
-  width: 100%;
-  height: 100%;
-  .el-row {
-    height: 100%;
-    width: 100%;
-    align-items: center;
-  }
-  .search-area,
-  .operation-area {
-    height: 50px;
-  }
-  .search-area {
-    display: inline-flex;
-    align-items: center;
-  }
-  :deep(.el-date-editor) {
-    margin: 0 12px !important;
-  }
-  .operation-area {
-    display: flex;
-    align-items: center;
-  }
-  .data-area {
-    height: calc(100% - 100px);
-  }
+.search-col {
+  flex: none;
+  display: flex;
 }
 .el-input {
   width: auto;
+  margin-right: 12px;
 }
-:deep(.el-card) {
-  height: 100%;
-  .el-card__body {
-    height: calc(100% - 58px) !important;
-    box-sizing: border-box;
-  }
+:deep(.el-date-editor) {
+  margin-right: 12px !important;
 }
-:deep(.el-table) {
-  height: calc(100% - 32px);
+.margin-div {
+  margin-top: 12px;
+  // margin-bottom: 12px;
 }
 </style>
