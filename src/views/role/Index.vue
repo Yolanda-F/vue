@@ -118,9 +118,7 @@ import {
 } from "@element-plus/icons-vue";
 import { ElMessageBox } from "element-plus";
 import CreateRole from "./CreateRole.vue";
-import { useStore } from "@/store/index";
 
-const store = useStore();
 let searchText = ref("");
 let tableData = reactive([]);
 const multipleSelection = ref([]);
@@ -132,15 +130,13 @@ let checkedMenu = reactive([]); //选中的菜单列表
 let currentRow = ref(""); //点击行
 let roleRef = ref();
 let formData = ref({}); //要展示的数据
-let title = ref(); //对话框标题
 provide("formData", formData); //提供给孙组件
-provide("title", title);
 
 //创建角色
 const handleCreateRole = () => {
-  formData.value.name = store.userName;
+  formData.value = {};
   formData.value.date = new Date();
-  title.value = "新建角色";
+  roleRef.value.title = "新建角色";
   roleRef.value.dialogVisibile = true; //子组件对话框出现
 };
 //选择行
@@ -150,7 +146,7 @@ const handleSelectionChange = (val) => {
 //编辑操作
 const handleEdit = (row) => {
   formData.value = row;
-  title.value = "编辑角色";
+  roleRef.value.title = "编辑角色";
   roleRef.value.dialogVisibile = true; //子组件对话框出现
 };
 //改变页数量

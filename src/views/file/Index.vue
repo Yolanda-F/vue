@@ -125,7 +125,7 @@ let currentPage = ref(1); //当前页
 let pageSize = ref(10); //当前页数量
 let total = ref(0);
 let uploadRef = ref();
-let formData = reactive({}); //要展示的数据,
+let formData = ref({}); //要展示的数据,
 provide("formData", formData); //提供给孙组件
 
 //搜索
@@ -147,8 +147,8 @@ const handleSelect = (selection, row) => {
 };
 //上传文件
 const handleUpload = () => {
-  formData.creator = store.userName;
-  formData.createTime = new Date();
+  formData.value.creator = store.userName;
+  formData.value.createTime = new Date();
   uploadRef.value.dialogVisibile = true;
 };
 //批量删除

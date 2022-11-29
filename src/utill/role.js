@@ -12,7 +12,7 @@ export const roleTableData = [
   {
     prop: "permission",
     label: "权限",
-    isColumn: true,
+    isColumn: false,
     isForm: false,
     type: "input",
     required: false,

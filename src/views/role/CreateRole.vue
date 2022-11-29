@@ -21,13 +21,13 @@
 </template>
 
 <script setup>
-import { ref, defineExpose, provide, inject } from "vue";
+import { ref, defineExpose, provide } from "vue";
 import { roleTableData } from "@/utill/role";
 import FormCreate from "@/components/FormCreate.vue";
 
 let dialogVisibile = ref(false);
 let formRef = ref();
-let title = inject("title"); //接收父组件传递的变量
+let title = ref("");
 
 //关闭弹窗
 const handleClose = () => {
@@ -43,6 +43,6 @@ const handleSubmit = () => {
     }
   });
 };
-defineExpose({ dialogVisibile });
+defineExpose({ dialogVisibile, title });
 provide("columns", roleTableData); //提供给子组件
 </script>

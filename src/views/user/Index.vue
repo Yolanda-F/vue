@@ -41,7 +41,6 @@
             v-for="item in currentColumn"
             :prop="item.prop"
             :label="item.label"
-            :aria-current="item.width"
             :key="item.prop"
           >
             <template #default="scope" v-if="item.prop == 'state'">
@@ -76,7 +75,7 @@
       </el-card>
     </el-col>
   </el-row>
-  <OperationUser></OperationUser>
+  <OperationUser ref="userRef"></OperationUser>
 </template>
 
 <script setup>
@@ -91,9 +90,8 @@ import {
   ChatDotRound,
 } from "@element-plus/icons-vue";
 import { ElMessageBox } from "element-plus";
-import { useStore } from "@/store/index";
 import OperationUser from "./OperationUser.vue";
-const store = useStore();
+
 let searchText = ref("");
 //当前表格的列
 const currentColumn = reactive([]);
@@ -106,9 +104,9 @@ let tableData = reactive([
     name: "Tom",
     state: true,
     phone: "123456",
-    department: "No. 189, Grove St, Los Angeles",
+    department: "xx部门",
     mail: "123@163.com",
-    gender: "male",
+    gender: "女",
   },
 ]);
 const multipleSelection = ref([]);
@@ -116,6 +114,7 @@ const multipleSelection = ref([]);
 const currentPage = ref(1);
 const pageSize = ref(10);
 let total = ref(1);
+let userRef = ref();
 
 //选择行
 const handleSelectionChange = (val) => {
@@ -124,8 +123,8 @@ const handleSelectionChange = (val) => {
 //编辑用户
 const editUser = (row) => {
   currentRow.value = row;
-  store.userDialogTips = "编辑用户";
-  store.userDialogVisible = true;
+  userRef.value.title = "编辑用户";
+  userRef.value.dialogVisibile = true;
 };
 
 const handleSizeChange = (val) => {
@@ -138,8 +137,9 @@ const handleCurrentChange = (val) => {
 //新增用户
 const addUser = () => {
   currentRow.value = {};
-  store.userDialogTips = "新增用户";
-  store.userDialogVisible = true;
+  currentRow.value.date = new Date();
+  userRef.value.title = "新增用户";
+  userRef.value.dialogVisibile = true;
 };
 //删除多个用户
 const handleDeleteUsers = () => {

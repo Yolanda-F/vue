@@ -5,7 +5,7 @@
     :model="formData"
     :rules="rules"
     ref="formDataRef"
-    label-width="100"
+    label-width="80"
     label-position="right"
   >
     <el-form-item
@@ -40,6 +40,31 @@
         type="date"
         :disabled="column.disabled"
       />
+      <!-- select类型 -->
+      <el-select
+        v-if="column.type == 'select'"
+        v-model="formData[column.prop]"
+        placeholder="请选择"
+      >
+        <el-option
+          v-for="item in column.options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+      <!-- radio类型 -->
+      <el-radio-group
+        v-if="column.type == 'radio'"
+        v-model="formData[column.prop]"
+      >
+        <el-radio
+          :label="item.label"
+          v-for="item in column.options"
+          :key="item.label"
+          >{{ item.name }}</el-radio
+        >
+      </el-radio-group>
     </el-form-item>
   </el-form>
 </template>
@@ -72,13 +97,11 @@ const getRules = () => {
 
 onMounted(() => {
   currentColumn.length = 0;
-  // formData = {};
   columns.forEach((column) => {
     //只留下需要展示的项
     if (column.isForm) {
       currentColumn.push(column);
     }
-    // formData[column.prop] = column.defaultValue;
   });
   getRules();
 });
@@ -87,6 +110,9 @@ defineExpose({ formDataRef, formData });
 
 <style lang="less" scoped>
 .upload {
+  width: 100%;
+}
+:deep(.el-select) {
   width: 100%;
 }
 :deep(.el-date-editor) {
