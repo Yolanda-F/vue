@@ -50,7 +50,6 @@ import { UploadFilled } from "@element-plus/icons-vue";
 
 let columns = inject("columns"); //接收父组件传递的变量
 let formData = inject("formData"); //接收父组件传递的变量
-
 let currentColumn = reactive([]); //要展示的表单项（去除不需要展示的项）
 let rules = reactive([]);
 let formDataRef = ref();

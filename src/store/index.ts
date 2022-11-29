@@ -24,6 +24,8 @@ export const useStore = defineStore("index", {
       userName: "", //用户名
       roles: [], //用户角色
       activeMenu: "home",
+      userDialogTips: "", //用户操作弹窗的tips
+      userDialogVisible: false, //弹窗是否显示
     };
   },
   actions: {

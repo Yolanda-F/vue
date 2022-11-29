@@ -8,10 +8,18 @@
         :prefix-icon="Search"
       />
       <el-button type="primary" :icon="Search">搜索</el-button>
-      <el-button type="warning" :icon="RefreshRight">重置</el-button>
+      <el-button type="warning" :icon="RefreshRight" @click="searchText = ''"
+        >重置</el-button
+      >
     </el-col>
     <el-col>
-      <el-button type="primary" :icon="Plus" class="margin-div">新增</el-button>
+      <el-button
+        type="primary"
+        :icon="Plus"
+        class="margin-div"
+        @click="addUser()"
+        >新增</el-button
+      >
       <el-button
         type="danger"
         :icon="Delete"
@@ -30,7 +38,7 @@
         >
           <el-table-column type="selection" width="55" />
           <el-table-column
-            v-for="item in userTableData"
+            v-for="item in currentColumn"
             :prop="item.prop"
             :label="item.label"
             :aria-current="item.width"
@@ -45,18 +53,13 @@
               <el-button
                 type="primary"
                 :icon="EditPen"
-                @click="handleEdit()"
+                @click="editUser(scope.row)"
               ></el-button>
-              <el-popconfirm
-                confirm-button-text="确认"
-                cancel-button-text="取消"
-                title="确定删除?"
-                @confirm="handleDelete(scope.row)"
-              >
-                <template #reference>
-                  <el-button type="danger" :icon="Delete"></el-button>
-                </template>
-              </el-popconfirm>
+              <el-button
+                type="danger"
+                :icon="Delete"
+                @click="deleteUser(scope.row)"
+              ></el-button>
               <el-button type="success" :icon="ChatDotRound"></el-button>
             </template>
           </el-table-column>
@@ -73,10 +76,11 @@
       </el-card>
     </el-col>
   </el-row>
+  <OperationUser></OperationUser>
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted, provide } from "vue";
 import { userTableData } from "@/utill/user";
 import {
   RefreshRight,
@@ -87,8 +91,15 @@ import {
   ChatDotRound,
 } from "@element-plus/icons-vue";
 import { ElMessageBox } from "element-plus";
-
+import { useStore } from "@/store/index";
+import OperationUser from "./OperationUser.vue";
+const store = useStore();
 let searchText = ref("");
+//当前表格的列
+const currentColumn = reactive([]);
+//当前行的数据，传递给FormCreate组件
+const currentRow = ref({});
+provide("formData", currentRow);
 let tableData = reactive([
   {
     date: "2016-05-03",
@@ -110,17 +121,25 @@ let total = ref(1);
 const handleSelectionChange = (val) => {
   multipleSelection.value = val;
 };
-//编辑
-const handleEdit = () => {
-  console.log("click");
+//编辑用户
+const editUser = (row) => {
+  currentRow.value = row;
+  store.userDialogTips = "编辑用户";
+  store.userDialogVisible = true;
 };
-//改变页数量
+
 const handleSizeChange = (val) => {
   console.log(`${val} items per page`);
 };
 //改变当前页
 const handleCurrentChange = (val) => {
   console.log(`current page: ${val}`);
+};
+//新增用户
+const addUser = () => {
+  currentRow.value = {};
+  store.userDialogTips = "新增用户";
+  store.userDialogVisible = true;
 };
 //删除多个用户
 const handleDeleteUsers = () => {
@@ -135,10 +154,29 @@ const handleDeleteUsers = () => {
     console.log(multipleSelection.value);
   });
 };
-//表格内的删除按钮
-const handleDelete = (row) => {
-  console.log(row);
+//删除一个用户
+const deleteUser = (row) => {
+  ElMessageBox.confirm("确定删除选择的用户", "提示", {
+    cancelButtonText: "取消",
+    confirmButtonText: "确认",
+    closeOnClickModal: false,
+    closeOnPressEscape: false,
+    autofocus: false,
+    type: "warning",
+  }).then(() => {
+    console.log(row);
+  });
 };
+//表格内的删除按钮
+onMounted(() => {
+  currentColumn.length = 0;
+  userTableData.forEach((column) => {
+    //只留下需要展示的项
+    if (column.isColumn) {
+      currentColumn.push(column);
+    }
+  });
+});
 </script>
 <style scoped lang="less">
 .el-input {
