@@ -13,6 +13,10 @@ export const useStore = defineStore("index", {
         key: "activeMenu",
         paths: ["activeMenu"],
       },
+      {
+        key: "roles",
+        paths: ["roles"],
+      },
     ],
   },
   state: () => {
@@ -22,5 +26,12 @@ export const useStore = defineStore("index", {
       activeMenu: "home",
     };
   },
-  actions: {},
+  actions: {
+    //清空变量
+    clearStore() {
+      this.userName = "";
+      this.roles = [];
+      this.activeMenu = "home";
+    },
+  },
 });
