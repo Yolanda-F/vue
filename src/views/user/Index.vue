@@ -12,13 +12,25 @@
     </el-col>
     <el-col>
       <el-button type="primary" :icon="Plus" class="margin-div">新增</el-button>
-      <el-button
-        type="danger"
-        :icon="Delete"
-        :disabled="multipleSelection.length > 0 ? false : true"
-        class="margin-div"
-        >删除</el-button
+      <el-popconfirm
+        confirm-button-text="确认"
+        cancel-button-text="取消"
+        :icon="InfoFilled"
+        icon-color="#626AEF"
+        title="是否删除本条数据?"
+        @confirm="confirmEvent"
+        @cancel="cancelEvent"
       >
+        <template #reference>
+          <el-button
+            type="danger"
+            :icon="Delete"
+            :disabled="multipleSelection.length > 0 ? false : true"
+            class="margin-div"
+            >删除</el-button
+          >
+        </template>
+      </el-popconfirm>
     </el-col>
     <el-col class="margin-div">
       <el-card header="用户列表">
@@ -40,13 +52,26 @@
             </template>
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
-            <template #default>
+            <template #default="scope">
               <el-button
                 type="primary"
                 :icon="EditPen"
                 @click="handleClick()"
               ></el-button>
-              <el-button type="danger" :icon="Delete"></el-button>
+              <el-popconfirm
+                confirm-button-text="确认"
+                cancel-button-text="取消"
+                :icon="InfoFilled"
+                icon-color="#626AEF"
+                title="是否删除本条数据?"
+                @confirm="tableConfirmEvent(scope.row)"
+                @cancel="tableCancelEvent"
+              >
+                <template #reference>
+                  <el-button type="danger" :icon="Delete"></el-button>
+                </template>
+              </el-popconfirm>
+              <el-button type="success" :icon="ChatDotRound"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -73,7 +98,10 @@ import {
   Plus,
   Delete,
   EditPen,
+  InfoFilled,
+  ChatDotRound,
 } from "@element-plus/icons-vue";
+import { ElMessage } from "element-plus";
 
 let searchText = ref("");
 let tableData = reactive([
@@ -104,6 +132,27 @@ const handleSizeChange = (val) => {
 };
 const handleCurrentChange = (val) => {
   console.log(`current page: ${val}`);
+};
+//表格外删除时的确认和取消
+const confirmEvent = () => {
+  ElMessage({
+    message: "删除成功.",
+    type: "success",
+  });
+};
+const cancelEvent = () => {
+  console.log("cancel!");
+};
+//表格内的删除按钮的确认于取消
+const tableConfirmEvent = (row) => {
+  console.log(row);
+  ElMessage({
+    message: "删除成功.",
+    type: "success",
+  });
+};
+const tableCancelEvent = () => {
+  console.log("cancel!");
 };
 </script>
 <style scoped lang="less">
