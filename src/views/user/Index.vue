@@ -20,13 +20,12 @@
         >删除</el-button
       >
     </el-col>
-    <el-col>
+    <el-col class="margin-div">
       <el-card header="用户列表">
         <el-table
           :data="tableData"
           style="width: 100%"
           @selection-change="handleSelectionChange"
-          class="margin-div"
         >
           <el-table-column type="selection" width="55" />
           <el-table-column
@@ -114,6 +113,6 @@ const handleCurrentChange = (val) => {
 }
 .margin-div {
   margin-top: 12px;
-  margin-bottom: 12px;
+  // margin-bottom: 12px;
 }
 </style>
