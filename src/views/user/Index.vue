@@ -20,45 +20,47 @@
         >删除</el-button
       >
     </el-col>
-    <el-col
-      ><el-table
-        :data="tableData"
-        style="width: 100%"
-        @selection-change="handleSelectionChange"
-        class="margin-div"
-      >
-        <el-table-column type="selection" width="55" />
-        <el-table-column
-          v-for="item in userTableData"
-          :prop="item.prop"
-          :label="item.label"
-          :aria-current="item.width"
-          :key="item.name"
+    <el-col>
+      <el-card header="用户列表">
+        <el-table
+          :data="tableData"
+          style="width: 100%"
+          @selection-change="handleSelectionChange"
+          class="margin-div"
         >
-          <template #default="scope" v-if="item.prop == 'state'">
-            <el-switch v-model="scope.row.state" />
-          </template>
-        </el-table-column>
-        <el-table-column fixed="right" label="操作" width="200">
-          <template #default>
-            <el-button
-              type="primary"
-              :icon="EditPen"
-              @click="handleClick()"
-            ></el-button>
-            <el-button type="danger" :icon="Delete"></el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-pagination
-        v-model:current-page="currentPage"
-        v-model:page-size="pageSize"
-        :page-sizes="[10, 20, 30, 40]"
-        layout="total, sizes, prev, pager, next"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+          <el-table-column type="selection" width="55" />
+          <el-table-column
+            v-for="item in userTableData"
+            :prop="item.prop"
+            :label="item.label"
+            :aria-current="item.width"
+            :key="item.name"
+          >
+            <template #default="scope" v-if="item.prop == 'state'">
+              <el-switch v-model="scope.row.state" />
+            </template>
+          </el-table-column>
+          <el-table-column fixed="right" label="操作" width="200">
+            <template #default>
+              <el-button
+                type="primary"
+                :icon="EditPen"
+                @click="handleClick()"
+              ></el-button>
+              <el-button type="danger" :icon="Delete"></el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          v-model:current-page="currentPage"
+          v-model:page-size="pageSize"
+          :page-sizes="[10, 20, 30, 40]"
+          layout="total, sizes, prev, pager, next"
+          :total="total"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
+      </el-card>
     </el-col>
   </el-row>
 </template>
