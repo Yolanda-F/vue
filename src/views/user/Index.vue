@@ -8,10 +8,18 @@
         :prefix-icon="Search"
       />
       <el-button type="primary" :icon="Search">搜索</el-button>
-      <el-button type="warning" :icon="RefreshRight">重置</el-button>
+      <el-button type="warning" :icon="RefreshRight" @click="searchText = ''"
+        >重置</el-button
+      >
     </el-col>
     <el-col>
-      <el-button type="primary" :icon="Plus" class="margin-div">新增</el-button>
+      <el-button
+        type="primary"
+        :icon="Plus"
+        class="margin-div"
+        @click="addUser()"
+        >新增</el-button
+      >
       <el-popconfirm
         confirm-button-text="确认"
         cancel-button-text="取消"
@@ -41,7 +49,7 @@
         >
           <el-table-column type="selection" width="55" />
           <el-table-column
-            v-for="item in userTableData"
+            v-for="item in currentColumn"
             :prop="item.prop"
             :label="item.label"
             :aria-current="item.width"
@@ -56,7 +64,7 @@
               <el-button
                 type="primary"
                 :icon="EditPen"
-                @click="handleClick()"
+                @click="editUser(scope.row)"
               ></el-button>
               <el-popconfirm
                 confirm-button-text="确认"
@@ -87,10 +95,11 @@
       </el-card>
     </el-col>
   </el-row>
+  <OperationUser></OperationUser>
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted, provide } from "vue";
 import { userTableData } from "@/utill/user";
 import {
   RefreshRight,
@@ -102,8 +111,17 @@ import {
   ChatDotRound,
 } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
-
+// import { useRouter } from "vue-router";
+import { useStore } from "@/store/index";
+import OperationUser from "./OperationUser.vue";
+const store = useStore();
+// const router = useRouter();
 let searchText = ref("");
+//当前表格的列
+const currentColumn = reactive([]);
+//当前行的数据，传递给FormCreate组件
+const currentRow = ref({});
+provide("formData", currentRow);
 let tableData = reactive([
   {
     date: "2016-05-03",
@@ -124,14 +142,24 @@ let total = ref(1);
 const handleSelectionChange = (val) => {
   multipleSelection.value = val;
 };
-const handleClick = () => {
-  console.log("click");
+//编辑用户
+const editUser = (row) => {
+  currentRow.value = row;
+  store.userDialogTips = "编辑用户";
+  store.userDialogVisible = true;
 };
+
 const handleSizeChange = (val) => {
   console.log(`${val} items per page`);
 };
 const handleCurrentChange = (val) => {
   console.log(`current page: ${val}`);
+};
+//新增用户
+const addUser = () => {
+  currentRow.value = {};
+  store.userDialogTips = "新增用户";
+  store.userDialogVisible = true;
 };
 //表格外删除时的确认和取消
 const confirmEvent = () => {
@@ -154,6 +182,15 @@ const tableConfirmEvent = (row) => {
 const tableCancelEvent = () => {
   console.log("cancel!");
 };
+onMounted(() => {
+  currentColumn.length = 0;
+  userTableData.forEach((column) => {
+    //只留下需要展示的项
+    if (column.isColumn) {
+      currentColumn.push(column);
+    }
+  });
+});
 </script>
 <style scoped lang="less">
 .el-input {
