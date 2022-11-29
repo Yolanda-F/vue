@@ -109,12 +109,14 @@ import {
   Download,
   Delete,
 } from "@element-plus/icons-vue";
-import { onMounted, reactive, ref, computed } from "vue";
+import { onMounted, reactive, ref, computed, provide } from "vue";
 import { Permission } from "@/utill/permission";
 import { TableColumns } from "@/utill/file";
 import { ElMessageBox } from "element-plus";
 import UploadFile from "./UploadFile.vue";
+import { useStore } from "@/store/index";
 
+const store = useStore();
 let fileName = ref(""); //要搜索的文件名称或描述
 let fileDate = ref(""); //搜索的文件日期
 let fileData = reactive([]); //文件列表数据
@@ -123,6 +125,8 @@ let currentPage = ref(1); //当前页
 let pageSize = ref(10); //当前页数量
 let total = ref(0);
 let uploadRef = ref();
+let formData = reactive({}); //要展示的数据,
+provide("formData", formData); //提供给孙组件
 
 //搜索
 const handleSearch = () => {
@@ -143,6 +147,8 @@ const handleSelect = (selection, row) => {
 };
 //上传文件
 const handleUpload = () => {
+  formData.creator = store.userName;
+  formData.createTime = new Date();
   uploadRef.value.dialogVisibile = true;
 };
 //批量删除
@@ -217,6 +223,5 @@ onMounted(() => {
 }
 .margin-div {
   margin-top: 12px;
-  // margin-bottom: 12px;
 }
 </style>
