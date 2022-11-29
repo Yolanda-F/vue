@@ -51,7 +51,7 @@
           </el-col>
         </el-row>
       </el-header>
-      <el-main>
+      <el-main class="menu-router-main">
         <router-view />
       </el-main>
     </el-container>
@@ -137,5 +137,8 @@ const handleCommand = (value) => {
 }
 .el-avatar {
   --el-avatar-bg-color: var(--el-color-primary);
+}
+.menu-router-main {
+  overflow: auto;
 }
 </style>

@@ -177,7 +177,7 @@ const handleCurrentChange = (page) => {
 //获取表格数据
 const getFileList = () => {
   fileData.length = 0;
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 1; i++) {
     fileData.push({
       id: i,
       fileName: "文件1",
@@ -237,8 +237,5 @@ onMounted(() => {
 }
 :deep(.el-table) {
   height: calc(100% - 32px);
-  .cell {
-    text-align: center;
-  }
 }
 </style>
