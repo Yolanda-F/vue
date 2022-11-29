@@ -12,25 +12,14 @@
     </el-col>
     <el-col>
       <el-button type="primary" :icon="Plus" class="margin-div">新增</el-button>
-      <el-popconfirm
-        confirm-button-text="确认"
-        cancel-button-text="取消"
-        :icon="InfoFilled"
-        icon-color="#626AEF"
-        title="是否删除本条数据?"
-        @confirm="confirmEvent"
-        @cancel="cancelEvent"
+      <el-button
+        type="danger"
+        :icon="Delete"
+        :disabled="multipleSelection.length > 0 ? false : true"
+        class="margin-div"
+        @click="handleDeleteUsers"
+        >删除</el-button
       >
-        <template #reference>
-          <el-button
-            type="danger"
-            :icon="Delete"
-            :disabled="multipleSelection.length > 0 ? false : true"
-            class="margin-div"
-            >删除</el-button
-          >
-        </template>
-      </el-popconfirm>
     </el-col>
     <el-col class="margin-div">
       <el-card header="用户列表">
@@ -45,7 +34,7 @@
             :prop="item.prop"
             :label="item.label"
             :aria-current="item.width"
-            :key="item.name"
+            :key="item.prop"
           >
             <template #default="scope" v-if="item.prop == 'state'">
               <el-switch v-model="scope.row.state" />
@@ -61,11 +50,8 @@
               <el-popconfirm
                 confirm-button-text="确认"
                 cancel-button-text="取消"
-                :icon="InfoFilled"
-                icon-color="#626AEF"
-                title="是否删除本条数据?"
-                @confirm="tableConfirmEvent(scope.row)"
-                @cancel="tableCancelEvent"
+                title="确定删除?"
+                @confirm="handleDelete(scope.row)"
               >
                 <template #reference>
                   <el-button type="danger" :icon="Delete"></el-button>
@@ -98,10 +84,9 @@ import {
   Plus,
   Delete,
   EditPen,
-  InfoFilled,
   ChatDotRound,
 } from "@element-plus/icons-vue";
-import { ElMessage } from "element-plus";
+import { ElMessageBox } from "element-plus";
 
 let searchText = ref("");
 let tableData = reactive([
@@ -133,26 +118,22 @@ const handleSizeChange = (val) => {
 const handleCurrentChange = (val) => {
   console.log(`current page: ${val}`);
 };
-//表格外删除时的确认和取消
-const confirmEvent = () => {
-  ElMessage({
-    message: "删除成功.",
-    type: "success",
+//删除多个用户
+const handleDeleteUsers = () => {
+  ElMessageBox.confirm("确定删除选择的用户", "提示", {
+    cancelButtonText: "取消",
+    confirmButtonText: "确认",
+    closeOnClickModal: false,
+    closeOnPressEscape: false,
+    autofocus: false,
+    type: "warning",
+  }).then(() => {
+    console.log(multipleSelection.value);
   });
-};
-const cancelEvent = () => {
-  console.log("cancel!");
 };
 //表格内的删除按钮的确认于取消
-const tableConfirmEvent = (row) => {
+const handleDelete = (row) => {
   console.log(row);
-  ElMessage({
-    message: "删除成功.",
-    type: "success",
-  });
-};
-const tableCancelEvent = () => {
-  console.log("cancel!");
 };
 </script>
 <style scoped lang="less">
