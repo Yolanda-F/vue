@@ -14,25 +14,32 @@
       :prop="column.prop"
       :label="column.label"
     >
+      <!-- input类型 -->
       <el-input
         v-if="column.type == 'input'"
         v-model="formData[column.prop]"
         :disabled="column.disabled"
       />
+      <!-- textarea类型 -->
       <el-input
         v-if="column.type == 'textarea'"
         type="textarea"
         :rows="2"
         v-model="formData[column.prop]"
       />
+      <!-- file类型 -->
       <el-upload v-if="column.type == 'file'" drag multiple class="upload">
         <el-icon :size="32">
           <upload-filled />
         </el-icon>
-        <!-- <template #tip>
-          <div class="el_upload_tip"></div>
-        </template> -->
       </el-upload>
+      <!-- date类型 -->
+      <el-date-picker
+        v-if="column.type == 'date'"
+        v-model="formData[column.prop]"
+        type="date"
+        :disabled="column.disabled"
+      />
     </el-form-item>
   </el-form>
 </template>
@@ -42,8 +49,9 @@ import { onMounted, reactive, inject, ref, defineExpose } from "vue";
 import { UploadFilled } from "@element-plus/icons-vue";
 
 let columns = inject("columns"); //接收父组件传递的变量
+let formData = inject("formData"); //接收父组件传递的变量
+
 let currentColumn = reactive([]); //要展示的表单项（去除不需要展示的项）
-let formData = reactive({});
 let rules = reactive([]);
 let formDataRef = ref();
 
@@ -65,13 +73,13 @@ const getRules = () => {
 
 onMounted(() => {
   currentColumn.length = 0;
-  formData = {};
+  // formData = {};
   columns.forEach((column) => {
     //只留下需要展示的项
     if (column.isForm) {
       currentColumn.push(column);
     }
-    formData[column.prop] = column.defaultValue;
+    // formData[column.prop] = column.defaultValue;
   });
   getRules();
 });
@@ -81,5 +89,8 @@ defineExpose({ formDataRef, formData });
 <style lang="less" scoped>
 .upload {
   width: 100%;
+}
+:deep(.el-date-editor) {
+  --el-date-editor-width: 100%;
 }
 </style>
