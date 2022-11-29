@@ -116,9 +116,6 @@ const handleCurrentChange = (val) => {
 };
 </script>
 <style scoped lang="less">
-.el-row {
-  height: 100%;
-}
 .search {
   width: 100%;
 
