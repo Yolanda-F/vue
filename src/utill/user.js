@@ -5,7 +5,7 @@ export const userTableData = [
     width: 150,
   },
   {
-    prop: "gendr",
+    prop: "gender",
     label: "性别",
     width: 120,
   },
