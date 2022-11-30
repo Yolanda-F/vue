@@ -167,7 +167,6 @@ const deleteUser = (row) => {
     console.log(row);
   });
 };
-//表格内的删除按钮
 onMounted(() => {
   currentColumn.length = 0;
   userTableData.forEach((column) => {
