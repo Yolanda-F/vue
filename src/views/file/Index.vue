@@ -33,7 +33,6 @@
         :icon="Delete"
         :disabled="currentSelect.length == 0"
         @click="handleDelete"
-        v-permission="Permission.admin"
         class="margin-div"
         >删除</el-button
       >
@@ -76,11 +75,7 @@
                 @confirm="handleDeleteFile(scope.row)"
               >
                 <template #reference>
-                  <el-button
-                    type="danger"
-                    :icon="Delete"
-                    v-permission="Permission.admin"
-                  ></el-button>
+                  <el-button type="danger" :icon="Delete"></el-button>
                 </template>
               </el-popconfirm>
             </template>
@@ -110,7 +105,7 @@ import {
   Delete,
 } from "@element-plus/icons-vue";
 import { onMounted, reactive, ref, computed, provide } from "vue";
-import { Permission } from "@/utill/permission";
+// import { Permission } from "@/utill/permission";
 import { TableColumns } from "@/utill/file";
 import { ElMessageBox } from "element-plus";
 import UploadFile from "./UploadFile.vue";

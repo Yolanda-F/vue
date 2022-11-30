@@ -189,7 +189,7 @@ const handleRowClick = (row) => {
 //获取表格数据
 const getRoleList = () => {
   tableData.length = 0;
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 1; i++) {
     tableData.push({
       date: "2016-05-03",
       name: "Tom",

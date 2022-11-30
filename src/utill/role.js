@@ -61,15 +61,15 @@ export const MenuList = [
           { id: "departmentEdit", label: "部门编辑" },
         ],
       },
-      {
-        id: "post",
-        label: "岗位管理",
-        children: [
-          { id: "postInsert", label: "岗位创建" },
-          { id: "postDelete", label: "岗位删除" },
-          { id: "postEdit", label: "岗位编辑" },
-        ],
-      },
+      // {
+      //   id: "post",
+      //   label: "岗位管理",
+      //   children: [
+      //     { id: "postInsert", label: "岗位创建" },
+      //     { id: "postDelete", label: "岗位删除" },
+      //     { id: "postEdit", label: "岗位编辑" },
+      //   ],
+      // },
     ],
   },
   {
