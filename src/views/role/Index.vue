@@ -40,7 +40,7 @@
             >
               <el-table-column type="selection" />
               <el-table-column
-                v-for="item in roleTableData"
+                v-for="item in currentColumn"
                 :prop="item.prop"
                 :label="item.label"
                 :key="item.prop"
@@ -106,7 +106,7 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref, provide } from "vue";
+import { onMounted, reactive, ref, provide, computed } from "vue";
 import { roleTableData, MenuList } from "@/utill/role";
 import {
   RefreshRight,
@@ -197,7 +197,10 @@ const getRoleList = () => {
   }
   total.value = tableData.length;
 };
-
+//过滤出要展示的列
+const currentColumn = computed(() => {
+  return roleTableData.filter((column) => column.isColumn);
+});
 onMounted(() => {
   getRoleList();
 });

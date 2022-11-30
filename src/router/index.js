@@ -10,7 +10,7 @@ router.beforeEach((to, from, next) => {
     next();
   } else if (to.path == "/home") {
     //要去主页，必须从登录页面进入,并且存在登录状态
-    if (from.path == "/" && store.userName != "") {
+    if (store.userName != "") {
       next();
     } else {
       next({ path: "/" });

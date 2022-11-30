@@ -5,6 +5,7 @@
     :router="true"
     :default-active="activeIndex"
     :collapse="isCollapse"
+    :style="{ width: isCollapse ? '64px' : '200px' }"
     unique-opened
     @select="handleSelect"
   >
@@ -55,6 +56,7 @@ const handleCollapse = (value) => {
 };
 //点击菜单项
 const handleSelect = (index) => {
+  console.log(index);
   store.activeMenu = index;
 };
 const activeIndex = computed(() => {
@@ -65,7 +67,7 @@ defineExpose({ handleCollapse }); //暴露函数
 
 <style lang="less">
 .nav-menu {
-  width: 200px;
+  // width: 200px;
   --el-menu-bg-color: transparent;
   --el-menu-text-color: #fff;
   height: calc(100% - 60px);

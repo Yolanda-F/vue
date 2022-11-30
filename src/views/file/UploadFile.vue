@@ -7,7 +7,7 @@
     title="上传文件"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
-    destroy-on-close
+    :destroy-on-close="true"
     draggable
     :before-close="handleClose"
   >
@@ -30,6 +30,7 @@ let formRef = ref();
 
 //关闭弹窗
 const handleClose = () => {
+  formRef.value.handleReset(); //重置表单
   dialogVisibile.value = false;
 };
 //确认

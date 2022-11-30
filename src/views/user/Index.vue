@@ -79,7 +79,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, onMounted, provide } from "vue";
+import { reactive, ref, computed, provide } from "vue";
 import { userTableData } from "@/utill/user";
 import {
   RefreshRight,
@@ -93,8 +93,6 @@ import { ElMessageBox } from "element-plus";
 import OperationUser from "./OperationUser.vue";
 
 let searchText = ref("");
-//当前表格的列
-const currentColumn = reactive([]);
 //当前行的数据，传递给FormCreate组件
 const currentRow = ref({});
 provide("formData", currentRow);
@@ -167,15 +165,9 @@ const deleteUser = (row) => {
     console.log(row);
   });
 };
-//表格内的删除按钮
-onMounted(() => {
-  currentColumn.length = 0;
-  userTableData.forEach((column) => {
-    //只留下需要展示的项
-    if (column.isColumn) {
-      currentColumn.push(column);
-    }
-  });
+//过滤出要展示的列
+const currentColumn = computed(() => {
+  return userTableData.filter((column) => column.isColumn);
 });
 </script>
 <style scoped lang="less">
