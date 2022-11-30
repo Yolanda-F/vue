@@ -43,9 +43,9 @@
             :label="item.label"
             :key="item.prop"
           >
-            <template #default="scope" v-if="item.prop == 'state'">
+            <!-- <template #default="scope" v-if="item.prop == 'state'">
               <el-switch v-model="scope.row.state" />
-            </template>
+            </template> -->
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template #default="scope">
@@ -102,7 +102,7 @@ let tableData = reactive([
   {
     date: "2016-05-03",
     name: "Tom",
-    state: true,
+    state: "在线",
     phone: "123456",
     department: "xx部门",
     mail: "123@163.com",
