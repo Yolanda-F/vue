@@ -33,7 +33,6 @@
         :icon="Delete"
         :disabled="currentSelect.length == 0"
         @click="handleDelete"
-        v-permission="Permission.admin"
         class="margin-div"
         >删除</el-button
       >
@@ -76,11 +75,7 @@
                 @confirm="handleDeleteFile(scope.row)"
               >
                 <template #reference>
-                  <el-button
-                    type="danger"
-                    :icon="Delete"
-                    v-permission="Permission.admin"
-                  ></el-button>
+                  <el-button type="danger" :icon="Delete"></el-button>
                 </template>
               </el-popconfirm>
             </template>
@@ -109,12 +104,14 @@ import {
   Download,
   Delete,
 } from "@element-plus/icons-vue";
-import { onMounted, reactive, ref, computed } from "vue";
-import { Permission } from "@/utill/permission";
+import { onMounted, reactive, ref, computed, provide } from "vue";
+// import { Permission } from "@/utill/permission";
 import { TableColumns } from "@/utill/file";
 import { ElMessageBox } from "element-plus";
 import UploadFile from "./UploadFile.vue";
+import { useStore } from "@/store/index";
 
+const store = useStore();
 let fileName = ref(""); //要搜索的文件名称或描述
 let fileDate = ref(""); //搜索的文件日期
 let fileData = reactive([]); //文件列表数据
@@ -123,6 +120,8 @@ let currentPage = ref(1); //当前页
 let pageSize = ref(10); //当前页数量
 let total = ref(0);
 let uploadRef = ref();
+let formData = ref({}); //要展示的数据,
+provide("formData", formData); //提供给孙组件
 
 //搜索
 const handleSearch = () => {
@@ -143,6 +142,8 @@ const handleSelect = (selection, row) => {
 };
 //上传文件
 const handleUpload = () => {
+  formData.value.creator = store.userName;
+  formData.value.createTime = new Date();
   uploadRef.value.dialogVisibile = true;
 };
 //批量删除
@@ -217,6 +218,5 @@ onMounted(() => {
 }
 .margin-div {
   margin-top: 12px;
-  // margin-bottom: 12px;
 }
 </style>

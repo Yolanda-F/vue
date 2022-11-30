@@ -1,10 +1,10 @@
-<!-- 上传文件 -->
+<!-- 创建角色 -->
 
 <template>
   <el-dialog
     v-model="dialogVisibile"
     width="40%"
-    title="上传文件"
+    :title="title"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     destroy-on-close
@@ -22,11 +22,12 @@
 
 <script setup>
 import { ref, defineExpose, provide } from "vue";
-import { TableColumns } from "@/utill/file";
+import { roleTableData } from "@/utill/role";
 import FormCreate from "@/components/FormCreate.vue";
 
 let dialogVisibile = ref(false);
 let formRef = ref();
+let title = ref("");
 
 //关闭弹窗
 const handleClose = () => {
@@ -42,7 +43,6 @@ const handleSubmit = () => {
     }
   });
 };
-
-defineExpose({ dialogVisibile });
-provide("columns", TableColumns); //提供给子组件
+defineExpose({ dialogVisibile, title });
+provide("columns", roleTableData); //提供给子组件
 </script>

@@ -1,7 +1,7 @@
 <template>
   <el-dialog
-    v-model="store.userDialogVisible"
-    :title="store.userDialogTips"
+    v-model="dialogVisibile"
+    :title="title"
     width="30%"
     :before-close="handleClose"
   >
@@ -13,33 +13,30 @@
   </el-dialog>
 </template>
 <script setup>
-import { reactive, ref, provide, onMounted } from "vue";
+import { ref, provide, defineExpose } from "vue";
 import FormCreate from "@/components/FormCreate.vue";
 import { userTableData } from "@/utill/user";
-import { useStore } from "@/store/index";
 
-const store = useStore();
-
+let dialogVisibile = ref(false);
+let title = ref("");
 let formRef = ref();
+
 //表单项
-const currentForm = reactive([]);
 const handleClose = () => {
-  store.userDialogVisible = false;
+  dialogVisibile.value = false;
 };
 //表单的提交方法
 const handleSubmit = () => {
-  console.log(formRef);
-};
-provide("columns", currentForm); //提供给子组件
-onMounted(() => {
-  currentForm.length = 0;
-  userTableData.forEach((column) => {
-    //只留下需要展示的项
-    if (column.isForm) {
-      currentForm.push(column);
+  formRef.value.formDataRef.validate((valid) => {
+    if (valid) {
+      console.log(formRef.value.formData);
+    } else {
+      return false;
     }
   });
-});
+};
+defineExpose({ dialogVisibile, title });
+provide("columns", userTableData); //提供给子组件
 </script>
 <style scoped lang="less">
 .dialog-footer button:first-child {

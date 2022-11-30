@@ -21,7 +21,7 @@
           <span>{{ item.label }}</span>
         </template>
         <template v-for="child in item.children" :key="child.index">
-          <el-menu-item :index="child.index" v-permission="child.permission">
+          <el-menu-item :index="child.index">
             <el-icon>
               <component :is="child.icon" class="menu-icon"></component>
             </el-icon>
@@ -30,7 +30,7 @@
         </template>
       </el-sub-menu>
       <template v-else>
-        <el-menu-item :index="item.index" v-permission="item.permission">
+        <el-menu-item :index="item.index">
           <el-icon>
             <component :is="item.icon" class="menu-icon"></component>
           </el-icon>
