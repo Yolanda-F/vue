@@ -28,7 +28,15 @@
         v-model="formData[column.prop]"
       />
       <!-- file类型 -->
-      <el-upload v-if="column.type == 'file'" drag multiple class="upload">
+      <el-upload
+        v-if="column.type == 'file'"
+        v-model:file-list="formData[column.prop]"
+        drag
+        multipl
+        :auto-upload="false"
+        :limit="5"
+        class="upload"
+      >
         <el-icon :size="32">
           <upload-filled />
         </el-icon>
@@ -65,6 +73,13 @@
           >{{ item.name }}</el-radio
         >
       </el-radio-group>
+      <!-- inputNumber类型 -->
+      <el-input-number
+        v-if="column.type == 'number'"
+        v-model="formData[column.prop]"
+        :min="1"
+        controls-position="right"
+      />
     </el-form-item>
   </el-form>
 </template>
@@ -95,6 +110,11 @@ const getRules = () => {
   });
 };
 
+//清空表单
+const handleReset = () => {
+  formDataRef.value.resetFields();
+};
+
 onMounted(() => {
   currentColumn.length = 0;
   columns.forEach((column) => {
@@ -105,17 +125,29 @@ onMounted(() => {
   });
   getRules();
 });
-defineExpose({ formDataRef, formData });
+defineExpose({ formDataRef, formData, handleReset });
 </script>
 
 <style lang="less" scoped>
-.upload {
+:deep(.upload) {
   width: 100%;
+  .el-upload-dragger {
+    padding: var(--el-upload-dragger-padding-vertical);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 :deep(.el-select) {
   width: 100%;
 }
 :deep(.el-date-editor) {
   --el-date-editor-width: 100%;
+}
+:deep(.el-input-number) {
+  width: 100%;
+  .el-input__inner {
+    text-align: left;
+  }
 }
 </style>

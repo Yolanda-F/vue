@@ -2,12 +2,21 @@
 export const roleTableData = [
   {
     prop: "name",
-    label: "角色名称",
+    label: "名称",
     isColumn: true, //是否展示为表格列
     isForm: true, //是否展示为表单项
     type: "input", //表单类型
     required: true, //是否必填
     disabled: false, //是否不可编辑
+  },
+  {
+    prop: "level",
+    label: "权限等级",
+    isColumn: true,
+    isForm: true,
+    type: "number",
+    required: true,
+    disabled: false,
   },
   {
     prop: "permission",
