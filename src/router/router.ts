@@ -18,7 +18,6 @@ const routes: Array<RouteRecordRaw> = [
         path: "/department",
         component: () => import("@/views/department/Index.vue"),
       },
-      { path: "/post", component: () => import("@/views/post/Index.vue") },
       {
         path: "/center",
         component: () => import("@/views/PersonalMessage.vue"),

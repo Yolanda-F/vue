@@ -36,15 +36,6 @@ export const TableColumns = [
     disabled: false,
   },
   {
-    prop: "fileList",
-    label: "文件列表",
-    isColumn: false,
-    isForm: true,
-    type: "file",
-    required: true,
-    disabled: false,
-  },
-  {
     prop: "users",
     label: "指定用户",
     isColumn: false,
@@ -53,5 +44,14 @@ export const TableColumns = [
     required: true,
     disabled: false,
     options: [],
+  },
+  {
+    prop: "fileList",
+    label: "文件列表",
+    isColumn: false,
+    isForm: true,
+    type: "file",
+    required: true,
+    disabled: false,
   },
 ];

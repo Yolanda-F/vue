@@ -5,7 +5,6 @@ import {
   Document,
   Grid,
   ChatDotRound,
-  // List,
   HomeFilled,
 } from "@element-plus/icons-vue";
 
@@ -36,12 +35,6 @@ export const MenuItems = [
         label: "部门管理",
         icon: Grid,
       },
-      // {
-      //   index: "post",
-      //   label: "岗位管理",
-      //   icon: List,
-      //   permission: Permission.admin,
-      // },
     ],
   },
   {
