@@ -9,16 +9,16 @@ export const departmentData = [
     required: true, //是否必填
     disabled: false, //是否不可编辑
   },
-  {
-    prop: "order",
-    label: "排序",
-    // width: 150,
-    isColumn: true,
-    isForm: true,
-    type: "input",
-    required: true,
-    disabled: false,
-  },
+  // {
+  //   prop: "order",
+  //   label: "排序",
+  //   // width: 150,
+  //   isColumn: true,
+  //   isForm: true,
+  //   type: "input",
+  //   required: true,
+  //   disabled: false,
+  // },
   {
     prop: "date",
     label: "创建日期",

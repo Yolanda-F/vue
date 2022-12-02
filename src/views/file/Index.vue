@@ -64,6 +64,11 @@
           <el-table-column fixed="right" label="操作">
             <template #default="scope">
               <el-button
+                type="primary"
+                :icon="EditPen"
+                @click="handleEdit(scope.row)"
+              ></el-button>
+              <el-button
                 type="warning"
                 :icon="Download"
                 @click="handleDownloadFile(scope.row)"
@@ -103,9 +108,9 @@ import {
   Upload,
   Download,
   Delete,
+  EditPen,
 } from "@element-plus/icons-vue";
 import { onMounted, reactive, ref, computed, provide } from "vue";
-// import { Permission } from "@/utill/permission";
 import { TableColumns } from "@/utill/file";
 import { ElMessageBox } from "element-plus";
 import UploadFile from "./UploadFile.vue";
@@ -166,6 +171,12 @@ const handleDownload = () => {
 //删除某行数据
 const handleDeleteFile = (row) => {
   console.log("delete file", row);
+};
+//编辑
+const handleEdit = (row) => {
+  console.log(row);
+  formData.value = row;
+  uploadRef.value.dialogVisibile = true;
 };
 //下载某个文件
 const handleDownloadFile = (row) => {

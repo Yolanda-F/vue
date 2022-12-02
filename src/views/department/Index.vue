@@ -30,11 +30,12 @@
       >
     </el-col>
     <el-col class="margin-div">
-      <el-card header="用户列表">
+      <el-card header="部门列表">
         <el-table
           :data="tableData"
           style="width: 100%"
           @selection-change="handleSelectionChange"
+          row-key="id"
         >
           <el-table-column type="selection" width="55" />
           <el-table-column
@@ -43,9 +44,6 @@
             :label="item.label"
             :key="item.prop"
           >
-            <!-- <template #default="scope" v-if="item.prop == 'state'">
-              <el-switch v-model="scope.row.state" />
-            </template> -->
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template #default="scope">
@@ -94,9 +92,9 @@ const currentColumn = reactive([]); //当前表格绑定的列
 const multipleSelection = ref([]); //当前勾选的项
 let tableData = reactive([
   {
+    id: 1,
     date: "2016-05-03",
-    name: "Tom",
-    order: 1,
+    name: "父部门",
   },
 ]);
 //当前行的数据，传递给FormCreate组件
@@ -167,5 +165,14 @@ onMounted(() => {
 }
 .margin-div {
   margin-top: 12px;
+}
+:deep(.cell) {
+  position: relative;
+  .el-table__expand-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(0, 50%);
+  }
 }
 </style>

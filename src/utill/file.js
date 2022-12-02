@@ -44,4 +44,14 @@ export const TableColumns = [
     required: true,
     disabled: false,
   },
+  {
+    prop: "users",
+    label: "指定用户",
+    isColumn: false,
+    isForm: true,
+    type: "select",
+    required: true,
+    disabled: false,
+    options: [],
+  },
 ];

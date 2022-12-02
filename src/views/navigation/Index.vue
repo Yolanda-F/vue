@@ -92,6 +92,7 @@ const handleCommand = (value) => {
       router.push("/");
     });
   } else if (value == "center") {
+    store.activeMenu = "";
     router.push("/center");
   }
 };

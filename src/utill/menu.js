@@ -4,10 +4,10 @@ import {
   Avatar,
   Document,
   Grid,
+  ChatDotRound,
   // List,
   HomeFilled,
 } from "@element-plus/icons-vue";
-// import { Permission } from "./permission";
 
 //导航菜单
 export const MenuItems = [
@@ -15,7 +15,6 @@ export const MenuItems = [
     index: "home",
     label: "首页",
     icon: HomeFilled,
-    // permission: Permission.both,
   },
   {
     index: "system",
@@ -26,19 +25,16 @@ export const MenuItems = [
         index: "user",
         label: "用户管理",
         icon: User,
-        // permission: Permission.both,
       },
       {
         index: "role",
         label: "角色管理",
         icon: Avatar,
-        // permission: Permission.admin,
       },
       {
         index: "department",
         label: "部门管理",
         icon: Grid,
-        // permission: Permission.admin,
       },
       // {
       //   index: "post",
@@ -49,9 +45,13 @@ export const MenuItems = [
     ],
   },
   {
+    index: "chat",
+    label: "聊天管理",
+    icon: ChatDotRound,
+  },
+  {
     index: "file",
     label: "文件管理",
     icon: Document,
-    // permission: Permission.both,
   },
 ];

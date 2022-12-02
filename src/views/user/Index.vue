@@ -59,7 +59,7 @@
                 :icon="Delete"
                 @click="deleteUser(scope.row)"
               ></el-button>
-              <el-button type="success" :icon="ChatDotRound"></el-button>
+              <!-- <el-button type="success" :icon="ChatDotRound"></el-button> -->
             </template>
           </el-table-column>
         </el-table>
@@ -87,7 +87,7 @@ import {
   Plus,
   Delete,
   EditPen,
-  ChatDotRound,
+  // ChatDotRound,
 } from "@element-plus/icons-vue";
 import { ElMessageBox } from "element-plus";
 import OperationUser from "./OperationUser.vue";
