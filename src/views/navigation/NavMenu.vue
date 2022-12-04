@@ -6,7 +6,6 @@
     :default-active="activeIndex"
     :collapse="isCollapse"
     :style="{ width: isCollapse ? '64px' : '200px' }"
-    unique-opened
     @select="handleSelect"
   >
     <template v-for="item in MenuItems" :key="item.index">

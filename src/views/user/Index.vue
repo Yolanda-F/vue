@@ -4,11 +4,11 @@
     <el-col>
       <el-input
         v-model="searchText"
-        placeholder="请输入"
+        placeholder="请输入用户名"
         :prefix-icon="Search"
       />
       <el-button type="primary" :icon="Search">搜索</el-button>
-      <el-button type="warning" :icon="RefreshRight" @click="searchText = ''"
+      <el-button type="warning" :icon="RefreshRight" @click="handleReset"
         >重置</el-button
       >
     </el-col>
@@ -164,6 +164,10 @@ const deleteUser = (row) => {
   }).then(() => {
     console.log(row);
   });
+};
+//重置
+const handleReset = () => {
+  console.log("reset");
 };
 //过滤出要展示的列
 const currentColumn = computed(() => {

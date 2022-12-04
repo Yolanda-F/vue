@@ -1,7 +1,7 @@
 export const departmentData = [
   {
     prop: "name",
-    label: "名称",
+    label: "部门名称",
     // width: 150,
     isColumn: true, //是否展示为表格列
     isForm: true, //是否展示为表单项

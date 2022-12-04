@@ -3,7 +3,7 @@
   <el-row>
     <!-- 搜索区域 -->
     <el-col class="search-col">
-      <el-input placeholder="输入名称或者描述搜索" v-model="fileName" />
+      <el-input placeholder="请输入文件名称" v-model="fileName" />
       <el-date-picker
         v-model="fileDate"
         type="daterange"

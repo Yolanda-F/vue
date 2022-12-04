@@ -4,11 +4,11 @@
     <el-col>
       <el-input
         v-model="searchText"
-        placeholder="请输入"
+        placeholder="请输入部门名称"
         :prefix-icon="Search"
       />
       <el-button type="primary" :icon="Search">搜索</el-button>
-      <el-button type="warning" :icon="RefreshRight" @click="searchText = ''"
+      <el-button type="warning" :icon="RefreshRight" @click="handleReset"
         >重置</el-button
       >
     </el-col>
@@ -147,6 +147,10 @@ const deleteUser = (row) => {
   }).then(() => {
     console.log(row);
   });
+};
+//重置
+const handleReset = () => {
+  console.log("reset");
 };
 onMounted(() => {
   currentColumn.length = 0;

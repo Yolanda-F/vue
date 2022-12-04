@@ -84,4 +84,14 @@ export const userTableData = [
     required: false,
     disabled: false,
   },
+  {
+    prop: "password",
+    label: "初始密码",
+    // width: 120,
+    isColumn: false,
+    isForm: false,
+    type: "input",
+    required: false,
+    disabled: false,
+  },
 ];
