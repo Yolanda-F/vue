@@ -1,21 +1,40 @@
+//滚动条
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #0003;
+  border-radius: 10px;
+  transition: all .2s ease-in-out;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
 //对话框
-.el-dialog{
-  --el-dialog-margin-top:5vh;
-  .el-dialog__body{
+.el-dialog {
+  --el-dialog-margin-top: 5vh;
+
+  .el-dialog__body {
     max-height: 60vh;
     overflow: auto;
   }
 }
-.el-overlay-dialog{
+
+.el-overlay-dialog {
   overflow: hidden;
 }
+
 //表格
-.el-table{
-  .cell{
+.el-table {
+  .cell {
     text-align: center;
   }
 }
+
 //页码
-.el-pagination{
-  margin-top:12px;
+.el-pagination {
+  margin-top: 12px;
 }
