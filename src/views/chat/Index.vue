@@ -5,18 +5,30 @@
     <el-col :span="8">
       <el-card class="user-list">
         <template #header>
-          <el-input :prefix-icon="Search" placeholder="搜索" />
+          <el-row :gutter="10">
+            <el-col :span="20">
+              <el-input :prefix-icon="Search" placeholder="搜索" />
+            </el-col>
+            <el-col :span="4">
+              <el-button
+                :icon="Plus"
+                class="chat-primary-button"
+                title="发起群聊"
+                @click="handleGroupChat"
+              />
+            </el-col>
+          </el-row>
         </template>
         <template v-for="user in userList" :key="user.id">
-          <el-row class="chat-user" :gutter="20" @click="handleChat(user)">
+          <el-row class="chat-user" @click="handleChat(user)">
             <el-col :span="4" class="user-name">
-              <el-badge :value="12" :max="99">
+              <el-badge :value="user.number" :max="99" :hidden="user.hidden">
                 <el-avatar>{{ user.name }}</el-avatar>
               </el-badge>
             </el-col>
             <el-col :span="20" class="user-content">
               <div class="content time-content">
-                <span>{{ user.name }}</span>
+                <span class="username-span">{{ user.name }}</span>
                 <span class="small-span">昨天</span>
               </div>
               <div class="content message-content">
@@ -34,46 +46,78 @@
         </template>
         <div class="chat-content">
           <div class="chat-message"></div>
-          <div class="send-message"></div>
+          <div class="send-message">
+            <el-button class="chat-button send-button">发送</el-button>
+          </div>
         </div>
       </el-card>
     </el-col>
   </el-row>
+  <GroupChat ref="groupRef"></GroupChat>
 </template>
 
 <script setup>
-import { Search } from "@element-plus/icons-vue";
-import { reactive, ref } from "vue";
+import { Plus, Search } from "@element-plus/icons-vue";
+import { reactive, ref, onMounted } from "vue";
+import GroupChat from "./GroupChat.vue";
 
-let userList = reactive([{ id: 1, name: "admin" }]); //用户列表
+let userList = reactive([]); //用户列表
 let currentUser = ref(""); //当前聊天的用户
+let groupRef = ref();
 
 //点击用户进行聊天
 const handleChat = (user) => {
   currentUser.value = user.name;
+  user.hidden = true;
 };
+//发起群聊
+const handleGroupChat = () => {
+  groupRef.value.showDialog(userList);
+};
+onMounted(() => {
+  userList.length = 0;
+  for (let i = 0; i < 20; i++) {
+    userList.push({
+      id: i,
+      name: `user${i}`,
+      number: Math.round(Math.random() * 10),
+    });
+  }
+});
 </script>
 
 <style lang="less" scoped>
 .chat-row {
+  width: 100%;
   height: 100%;
+  .el-col {
+    height: 100%;
+  }
   .el-card {
     height: 100%;
   }
 }
+//用户列表
 :deep(.user-list) {
+  .el-card__header {
+    .el-input {
+      .el-input__wrapper {
+        background-color: var(--el-color-info-light-8);
+      }
+    }
+  }
   .el-card__body {
     height: calc(100% - 69px) !important;
+    background-color: var(--el-color-info-light-8);
     box-sizing: border-box;
     overflow: auto;
+    padding: 0;
   }
-}
-.el-avatar {
-  --el-avatar-bg-color: var(--el-color-primary);
 }
 .chat-user {
   height: 60px;
-  border-bottom: 1px solid var(--el-border-color-light);
+  padding: 5px;
+  // border-bottom: 1px solid var(--el-border-color-light);
   .user-name {
     display: flex;
     align-items: center;
@@ -94,6 +138,14 @@ const handleChat = (user) => {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 5px;
+      .username-span {
+        display: inline-block;
+        width: 90%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
     }
     .message-content {
       display: flex;
@@ -102,6 +154,10 @@ const handleChat = (user) => {
     }
   }
 }
+.chat-user:hover {
+  background-color: var(--el-color-info-light-7);
+}
+// 聊天区域
 :deep(.chat-area) {
   .current-user {
     display: block;
@@ -114,14 +170,20 @@ const handleChat = (user) => {
     overflow: auto;
   }
 }
-.chat-content {
+:deep(.chat-content) {
   height: 100%;
+  --send-message-with: 150px;
   .chat-message {
-    height: calc(100% - 100px);
+    height: calc(100% - var(--send-message-with));
   }
   .send-message {
-    height: 100px;
+    height: var(--send-message-with);
     border-top: 1px solid var(--el-border-color-light);
+    .send-button {
+      position: absolute;
+      bottom: var(--el-card-padding);
+      right: var(--el-card-padding);
+    }
   }
 }
 </style>

@@ -11,6 +11,7 @@ import { ElMessage } from "element-plus";
 import { permission } from "./directive/permission";
 
 import "@/assets/style/index.less";
+import "@/assets/style/style.less";
 
 const app = createApp(App);
 app.use(createPinia().use(piniaPluginPersist));

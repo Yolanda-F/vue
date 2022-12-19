@@ -1,0 +1,40 @@
+//自定义元素的样式
+
+//发起群聊
+//绿色字体按钮的样式
+.chat-button,
+.chat-button:focus,
+.chat-button:active {
+    border-color: transparent;
+    background-color: var(--el-color-info-light-8);
+    color: var(--el-color-success);
+}
+
+.chat-button:hover {
+    border-color: transparent;
+    background-color: var(--el-color-info-light-7);
+    color: var(--el-color-success);
+}
+
+//普通按钮的样式
+.chat-primary-button,
+.chat-primary-button:active,
+.chat-primary-button:focus {
+    background-color: var(--el-color-info-light-8);
+    border-color: transparent;
+    color: var(--el-button-text-color);
+}
+
+.chat-primary-button.is-disabled,
+.chat-primary-button.is-disabled:hover,
+.chat-primary-button.is-disabled:focus {
+    background-color: var(--el-color-info-light-7);
+    border-color: transparent;
+    color: var(--el-button-disabled-text-color);
+}
+
+.chat-primary-button:hover {
+    background-color: var(--el-color-info-light-7);
+    border-color: transparent;
+    color: var(--el-button-text-color);
+}
