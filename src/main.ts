@@ -6,6 +6,7 @@ import router from "./router/router";
 import "./router/index";
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
+import "font-awesome/css/font-awesome.css";
 import axios from "axios";
 import { ElMessage } from "element-plus";
 import { permission } from "./directive/permission";

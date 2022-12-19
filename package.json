@@ -11,12 +11,14 @@
     "axios": "^1.2.0",
     "core-js": "^3.8.3",
     "element-plus": "^2.2.22",
+    "emoji-mart-vue-fast": "^12.0.1",
+    "font-awesome": "^4.7.0",
     "less": "^4.1.3",
     "less-loader": "^11.1.0",
     "pinia": "^2.0.25",
     "pinia-plugin-persist": "^1.0.0",
     "tinymce": "^6.3.0",
-    "vue": "^3.2.13",
+    "vue": "^3.2.45",
     "vue-quill-editor": "^3.0.6",
     "vue-router": "^4.0.3"
   },
@@ -54,12 +56,12 @@
     "rules": {
       "no-unused-vars": "off",
       "vue/multi-word-component-names": "off",
-      "semi":"off",
-      "singleQuote":"off",
-      "prettier/prettier":[
+      "semi": "off",
+      "singleQuote": "off",
+      "prettier/prettier": [
         "error",
         {
-          "endOfLine":"auto"
+          "endOfLine": "auto"
         }
       ]
     }

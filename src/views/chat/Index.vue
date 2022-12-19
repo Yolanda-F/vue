@@ -47,6 +47,45 @@
         <div class="chat-content">
           <div class="chat-message"></div>
           <div class="send-message">
+            <div class="tool">
+              <div class="fa-tool">
+                <el-popover
+                  placement="top"
+                  trigger="click"
+                  popper-class="emoji-popper"
+                >
+                  <template #reference>
+                    <i class="fa fa-smile-o fa-lg" title="表情"></i>
+                  </template>
+                  <picker
+                    :data="emojiIndex"
+                    :showSearch="false"
+                    :showPreview="false"
+                    :showCategories="false"
+                    :emojiTooltip="false"
+                    :i18n="{ categories: { smileys: '' } }"
+                    @select="addEmoji"
+                  />
+                </el-popover>
+                <el-upload
+                  action=""
+                  :limit="1"
+                  :show-file-list="false"
+                  class="upload-demo"
+                >
+                  <i class="fa fa-folder-o fa-lg" title="发送文件"></i>
+                </el-upload>
+              </div>
+            </div>
+            <div class="message-input">
+              <el-input
+                v-model="inputMessage"
+                autofocus
+                resize="none"
+                type="textarea"
+                placeholder=""
+              />
+            </div>
             <el-button class="chat-button send-button">发送</el-button>
           </div>
         </div>
@@ -60,10 +99,21 @@
 import { Plus, Search } from "@element-plus/icons-vue";
 import { reactive, ref, onMounted } from "vue";
 import GroupChat from "./GroupChat.vue";
+import data from "emoji-mart-vue-fast/data/all.json";
+import { Picker, EmojiIndex } from "emoji-mart-vue-fast/src";
+import "emoji-mart-vue-fast/css/emoji-mart.css";
+
+//表情包组件
+let emojisToShowFilter = function () {
+  return true;
+};
+let include = ["smileys"];
+let emojiIndex = new EmojiIndex(data, { emojisToShowFilter, include });
 
 let userList = reactive([]); //用户列表
 let currentUser = ref(""); //当前聊天的用户
 let groupRef = ref();
+let inputMessage = ref("");
 
 //点击用户进行聊天
 const handleChat = (user) => {
@@ -73,6 +123,10 @@ const handleChat = (user) => {
 //发起群聊
 const handleGroupChat = () => {
   groupRef.value.showDialog(userList);
+};
+//添加表情
+const addEmoji = (emoji) => {
+  inputMessage.value += emoji.native;
 };
 onMounted(() => {
   userList.length = 0;
@@ -167,7 +221,7 @@ onMounted(() => {
   .el-card__body {
     height: calc(100% - 69px) !important;
     box-sizing: border-box;
-    overflow: auto;
+    overflow: hidden;
   }
 }
 :deep(.chat-content) {
@@ -179,11 +233,54 @@ onMounted(() => {
   .send-message {
     height: var(--send-message-with);
     border-top: 1px solid var(--el-border-color-light);
+    position: relative;
+    .tool {
+      height: 32px;
+      .fa-tool {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        .fa {
+          color: #606266;
+          margin-right: 20px;
+        }
+        .fa:hover {
+          cursor: pointer;
+        }
+        .upload-demo {
+          height: 16px;
+        }
+      }
+    }
+    .message-input {
+      height: calc(100% - 32px - 32px);
+      overflow: auto;
+    }
     .send-button {
       position: absolute;
-      bottom: var(--el-card-padding);
-      right: var(--el-card-padding);
+      bottom: 0;
+      right: 0;
     }
+  }
+}
+:deep(.el-textarea) {
+  height: 100%;
+  .el-textarea__inner {
+    padding: 0;
+    height: 100% !important;
+    box-shadow: none;
+  }
+}
+</style>
+<style lang="less">
+// 表情包组件
+.emoji-mart-category-label {
+  display: none;
+}
+.emoji-popper {
+  width: auto !important;
+  .emoji-mart {
+    border: none;
   }
 }
 </style>
