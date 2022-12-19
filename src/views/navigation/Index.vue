@@ -137,9 +137,6 @@ const handleCommand = (value) => {
     }
   }
 }
-.el-avatar {
-  --el-avatar-bg-color: var(--el-color-primary);
-}
 .menu-router-main {
   overflow: auto;
 }

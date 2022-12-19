@@ -3,6 +3,9 @@
     v-model="dialogVisibile"
     :title="title"
     width="30%"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
+    :destroy-on-close="true"
     :before-close="handleClose"
   >
     <FormCreate ref="formRef"></FormCreate>
