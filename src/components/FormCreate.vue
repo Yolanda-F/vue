@@ -20,6 +20,14 @@
         v-model="formData[column.prop]"
         :disabled="column.disabled"
       />
+      <!-- 密码类型 -->
+      <el-input
+        v-if="column.type == 'password'"
+        v-model="formData[column.prop]"
+        type="password"
+        show-password
+        :disabled="column.disabled"
+      />
       <!-- textarea类型 -->
       <el-input
         v-if="column.type == 'textarea'"
@@ -125,7 +133,7 @@ onMounted(() => {
   });
   getRules();
 });
-defineExpose({ formDataRef, formData, handleReset });
+defineExpose({ formDataRef, formData, handleReset, rules });
 </script>
 
 <style lang="less" scoped>

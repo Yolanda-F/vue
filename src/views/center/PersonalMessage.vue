@@ -24,7 +24,9 @@
                 </el-icon>
                 安全设置
               </div>
-              <div class="change-password">修改密码</div>
+              <div class="change-password" @click="handleUpdatePassword">
+                修改密码
+              </div>
             </li>
           </ul>
         </div>
@@ -34,12 +36,14 @@
       <el-card></el-card>
     </el-col>
   </el-row>
+  <UpdatePassword ref="passwordRef"></UpdatePassword>
 </template>
 
 <script setup>
 import { useStore } from "@/store/index";
 import { Medal, User, WarnTriangleFilled } from "@element-plus/icons-vue";
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
+import UpdatePassword from "./UpdatePassword.vue";
 
 const store = useStore();
 const messageList = reactive([
@@ -50,6 +54,12 @@ let message = reactive({
   id: "test",
   userName: "test",
 });
+let passwordRef = ref();
+
+//修改密码
+const handleUpdatePassword = () => {
+  passwordRef.value.dialogVisibile = true;
+};
 </script>
 
 <style lang="less" scoped>

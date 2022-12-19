@@ -21,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: "/center",
-        component: () => import("@/views/PersonalMessage.vue"),
+        component: () => import("@/views/center/PersonalMessage.vue"),
       },
     ],
   },
