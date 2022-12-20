@@ -14,6 +14,10 @@ export const useStore = defineStore("index", {
         paths: ["activeMenu"],
       },
       {
+        key: "menuBread",
+        paths: ["menuBread"],
+      },
+      {
         key: "roles",
         paths: ["roles"],
       },
@@ -24,6 +28,7 @@ export const useStore = defineStore("index", {
       userName: "", //用户名
       roles: [], //用户角色
       activeMenu: "home",
+      menuBread: ["home"], //菜单--面包屑
     };
   },
   actions: {
@@ -32,6 +37,12 @@ export const useStore = defineStore("index", {
       this.userName = "";
       this.roles = [];
       this.activeMenu = "home";
+      this.menuBread = ["home"];
+    },
+    //根据点击的菜单项更新面包屑
+    updateBread(value: string[]) {
+      this.menuBread.length = 0;
+      this.menuBread.push(...value);
     },
   },
 });

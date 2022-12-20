@@ -152,6 +152,16 @@ const deleteUser = (row) => {
 const handleReset = () => {
   console.log("reset");
 };
+//改变每页数量
+const handleSizeChange = (size) => {
+  console.log(size);
+  pageSize.value = size;
+};
+//改变当前页
+const handleCurrentChange = (page) => {
+  console.log(page);
+  currentPage.value = page;
+};
 onMounted(() => {
   currentColumn.length = 0;
   departmentData.forEach((column) => {

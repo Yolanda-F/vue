@@ -26,7 +26,10 @@
               <Fold />
             </el-icon>
           </el-col>
-          <el-col :span="1" :offset="20">
+          <el-col :span="20" class="bread-col">
+            <BreadCrumb></BreadCrumb>
+          </el-col>
+          <el-col :span="1">
             <el-icon :size="iconSize" class="expand-icon">
               <Bell />
             </el-icon>
@@ -61,6 +64,7 @@
 <script setup>
 import { ref } from "vue";
 import NavMenu from "./NavMenu.vue";
+import BreadCrumb from "./BreadCrumb.vue";
 import { ArrowDown, Bell, Expand, Fold } from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
 import { ElMessageBox } from "element-plus";
@@ -133,6 +137,9 @@ const handleCommand = (value) => {
         display: flex;
         align-items: center;
         justify-content: center;
+      }
+      .bread-col {
+        justify-content: flex-start;
       }
     }
   }

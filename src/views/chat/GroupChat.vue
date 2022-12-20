@@ -3,7 +3,7 @@
   <el-dialog
     v-model="dialogVisibile"
     width="45%"
-    custom-class="group-dialog"
+    class="group-dialog"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :destroy-on-close="true"

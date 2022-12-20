@@ -54,8 +54,8 @@ const handleCollapse = (value) => {
   isCollapse.value = value;
 };
 //点击菜单项
-const handleSelect = (index) => {
-  console.log(index);
+const handleSelect = (index, indexPath) => {
+  store.updateBread(indexPath);
   store.activeMenu = index;
 };
 const activeIndex = computed(() => {
