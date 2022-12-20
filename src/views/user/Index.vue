@@ -7,7 +7,9 @@
         placeholder="请输入用户名"
         :prefix-icon="Search"
       />
-      <el-button type="primary" :icon="Search">搜索</el-button>
+      <el-button type="primary" :icon="Search" @click="handleSearch"
+        >搜索</el-button
+      >
       <el-button type="warning" :icon="RefreshRight" @click="handleReset"
         >重置</el-button
       >
@@ -43,9 +45,9 @@
             :label="item.label"
             :key="item.prop"
           >
-            <!-- <template #default="scope" v-if="item.prop == 'state'">
-              <el-switch v-model="scope.row.state" />
-            </template> -->
+            <template #default="scope">
+              <span v-html="scope.row[item.prop]"></span>
+            </template>
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template #default="scope">
@@ -99,7 +101,7 @@ provide("formData", currentRow);
 let tableData = reactive([
   {
     date: "2016-05-03",
-    name: "Tom",
+    name: "i am Tom , haah",
     state: "在线",
     phone: "123456",
     department: "xx部门",
@@ -114,6 +116,26 @@ const pageSize = ref(10);
 let total = ref(1);
 let userRef = ref();
 
+//搜索
+const handleSearch = () => {
+  tableData.forEach((d) => {
+    d.name = highlightWord(d.name);
+  });
+};
+//高亮内容
+const highlightWord = (value) => {
+  //如果包含搜索内容
+  if (searchText.value && value.indexOf(searchText.value) != -1) {
+    return value.replaceAll(
+      searchText.value,
+      `<span class="highlight-text">${searchText.value}</span>`
+    );
+  } else {
+    value = value.replaceAll(`<span class="highlight-text">`, "");
+    value = value.replaceAll(`</span>`, "");
+    return value;
+  }
+};
 //选择行
 const handleSelectionChange = (val) => {
   multipleSelection.value = val;
@@ -181,5 +203,8 @@ const currentColumn = computed(() => {
 }
 .margin-div {
   margin-top: 12px;
+}
+:deep(.highlight-text) {
+  background-color: yellow;
 }
 </style>
