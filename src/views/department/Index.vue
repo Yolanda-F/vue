@@ -110,13 +110,14 @@ let userRef = ref();
 const handleSelectionChange = (val) => {
   multipleSelection.value = val;
 };
+//新增部门
 const addDepartment = () => {
   currentRow.value = {};
   currentRow.value.date = new Date();
   userRef.value.title = "新增部门";
   userRef.value.dialogVisibile = true;
 };
-//编辑用户
+//编辑部门
 const editDepartment = (row) => {
   currentRow.value = row;
   userRef.value.title = "编辑部门";

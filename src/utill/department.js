@@ -25,8 +25,8 @@ export const departmentData = [
     // width: 150,
     isColumn: true,
     isForm: true,
-    type: "input",
+    type: "date",
     required: true,
-    disabled: false,
+    disabled: true,
   },
 ];
