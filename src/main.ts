@@ -4,7 +4,7 @@ import piniaPluginPersist from "pinia-plugin-persist"; //pinia持久化
 import App from "./App.vue";
 import router from "./router/router";
 import "./router/index";
-import ElementPlus from "element-plus";
+import ElementPlus, { ElLoading } from "element-plus";
 import "element-plus/dist/index.css";
 import "font-awesome/css/font-awesome.css";
 import axios from "axios";
@@ -25,28 +25,70 @@ app.directive("permission", permission);
 axios.defaults.baseURL = "";
 app.config.globalProperties.$http = axios;
 
+let loadingInstance; //loading实例
+interface requestType {
+  url: string | undefined;
+  timeId: number;
+}
+const requestList: requestType[] = []; //请求数组
+
+//关闭loading
+function closeLoading(error = null) {
+  if (loadingInstance) {
+    loadingInstance.close();
+    if (error) {
+      ElMessage.error(`请求失败：${error}`);
+    }
+  }
+}
+//清除添加的延迟
+function clearTimeList(url: string | undefined) {
+  if (url) {
+    const index = requestList.findIndex((d) => d.url == url);
+    if (index != -1) {
+      clearTimeout(requestList[index].timeId);
+      requestList.splice(index, 1);
+    }
+  }
+}
+
 //添加请求拦截器
 axios.interceptors.request.use(
   function (config) {
     //或许添加token
-    // 在发送请求之前做些什么
+    // 请求前添加loading
+    const timeId = setTimeout(() => {
+      loadingInstance = ElLoading.service({
+        fullscreen: true,
+        text: "",
+      });
+    }, 200);
+    //记录添加loading的url
+    requestList.push({
+      url: config.url,
+      timeId: timeId,
+    });
+
     return config;
   },
   function (error) {
-    ElMessage.error(`请求失败：${error}`);
-    // 对请求错误做些什么
+    clearTimeList(error.config.url);
+    closeLoading(error);
+    console.log(error);
     return Promise.reject(error);
   }
 );
 // 添加响应拦截器
 axios.interceptors.response.use(
   function (response) {
-    // 对响应数据做点什么
+    clearTimeList(response.config.url);
+    closeLoading();
     return response.data.res;
   },
   function (error) {
-    ElMessage.error(`请求失败：${error}`);
-    // 对响应错误做点什么
+    clearTimeList(error.config.url);
+    closeLoading(error);
+    console.log(error);
     return Promise.reject(error);
   }
 );
