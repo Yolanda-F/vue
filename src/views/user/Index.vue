@@ -80,8 +80,8 @@
   <OperationUser ref="userRef"></OperationUser>
 </template>
 
-<script setup>
-import { reactive, ref, computed, provide } from "vue";
+<script setup lang="ts">
+import { reactive, ref, computed, provide, onMounted } from "vue";
 import { userTableData } from "@/utill/user";
 import {
   RefreshRight,
@@ -89,27 +89,27 @@ import {
   Plus,
   Delete,
   EditPen,
-  // ChatDotRound,
 } from "@element-plus/icons-vue";
 import { ElMessageBox } from "element-plus";
 import OperationUser from "./OperationUser.vue";
+import { getUserListApi, findUserApi, deleteUsersApi } from "@/api/user";
 
 let searchText = ref("");
 //当前行的数据，传递给FormCreate组件
-const currentRow = ref({});
-provide("formData", currentRow);
-let tableData = reactive([
-  {
-    date: "2016-05-03",
-    name: "i am Tom , haah",
-    state: "在线",
-    phone: "123456",
-    department: "xx部门",
-    mail: "123@163.com",
-    gender: "女",
-  },
-]);
-const multipleSelection = ref([]);
+const currentRow = ref<User.UserData>({
+  id: 0,
+  username: "",
+  date: "",
+  role: "",
+  gender: 0,
+  phone: "",
+  mail: "",
+  departmentId: 0,
+  state: "",
+  password: "",
+});
+let tableData = reactive<User.UserData[]>([]);
+let multipleSelection = reactive<User.UserData[]>([]);
 //分页
 const currentPage = ref(1);
 const pageSize = ref(10);
@@ -118,8 +118,12 @@ let userRef = ref();
 
 //搜索
 const handleSearch = () => {
-  tableData.forEach((d) => {
-    d.name = highlightWord(d.name);
+  findUserApi(searchText.value).then((res) => {
+    tableData.length = 0;
+    res.forEach((d) => {
+      d.username = highlightWord(d.username);
+      tableData.push(d);
+    });
   });
 };
 //高亮内容
@@ -136,28 +140,34 @@ const highlightWord = (value) => {
     return value;
   }
 };
+//重置
+const handleReset = () => {
+  searchText.value = "";
+  getAllUser();
+};
 //选择行
 const handleSelectionChange = (val) => {
-  multipleSelection.value = val;
+  multipleSelection.push(...val);
 };
 //编辑用户
-const editUser = (row) => {
+const editUser = (row: User.UserData) => {
   currentRow.value = row;
   userRef.value.title = "编辑用户";
   userRef.value.dialogVisibile = true;
 };
-
-const handleSizeChange = (val) => {
-  console.log(`${val} items per page`);
+//改变页数量
+const handleSizeChange = (val: number) => {
+  pageSize.value = val;
+  getAllUser();
 };
 //改变当前页
-const handleCurrentChange = (val) => {
-  console.log(`current page: ${val}`);
+const handleCurrentChange = (val: number) => {
+  currentPage.value = val;
+  getAllUser();
 };
 //新增用户
 const addUser = () => {
-  currentRow.value = {};
-  currentRow.value.date = new Date();
+  currentRow.value.date = new Date().toLocaleString().replaceAll("/", "-");
   userRef.value.title = "新增用户";
   userRef.value.dialogVisibile = true;
 };
@@ -171,11 +181,15 @@ const handleDeleteUsers = () => {
     autofocus: false,
     type: "warning",
   }).then(() => {
-    console.log(multipleSelection.value);
+    let ids: number[] = [];
+    multipleSelection.forEach((user) => {
+      ids.push(user.id);
+    });
+    deleteUsers(ids);
   });
 };
 //删除一个用户
-const deleteUser = (row) => {
+const deleteUser = (row: User.UserData) => {
   ElMessageBox.confirm("确定删除选择的用户", "提示", {
     cancelButtonText: "取消",
     confirmButtonText: "确认",
@@ -184,17 +198,36 @@ const deleteUser = (row) => {
     autofocus: false,
     type: "warning",
   }).then(() => {
-    console.log(row);
+    deleteUsers([row.id]);
   });
 };
-//重置
-const handleReset = () => {
-  console.log("reset");
+//删除用户
+const deleteUsers = (ids: number[]) => {
+  deleteUsersApi(ids).then(() => {
+    getAllUser();
+  });
 };
 //过滤出要展示的列
 const currentColumn = computed(() => {
   return userTableData.filter((column) => column.isColumn);
 });
+//获取用户列表
+const getAllUser = () => {
+  getUserListApi(currentPage.value - 1, pageSize.value).then((res) => {
+    tableData.length = 0;
+    res.content.forEach((r) => {
+      r.username = highlightWord(r.username);
+      tableData.push(r);
+    });
+    total.value = res.totalElements; //记录总数量
+  });
+};
+
+onMounted(() => {
+  getAllUser();
+});
+provide("formData", currentRow); //提供给孙组件
+provide("getAllUser", getAllUser); //提供给子组件
 </script>
 <style scoped lang="less">
 .el-input {

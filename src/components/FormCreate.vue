@@ -53,7 +53,7 @@
       <el-date-picker
         v-if="column.type == 'date'"
         v-model="formData[column.prop]"
-        type="date"
+        type="datetime"
         :disabled="column.disabled"
       />
       <!-- select类型 -->

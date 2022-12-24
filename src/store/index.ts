@@ -6,6 +6,10 @@ export const useStore = defineStore("index", {
     enabled: true,
     strategies: [
       {
+        key: "token",
+        paths: ["token"],
+      },
+      {
         key: "userName",
         paths: ["userName"],
       },
@@ -25,6 +29,7 @@ export const useStore = defineStore("index", {
   },
   state: () => {
     return {
+      token: "", //请求头
       userName: "", //用户名
       roles: [], //用户角色
       activeMenu: "home",
@@ -34,6 +39,7 @@ export const useStore = defineStore("index", {
   actions: {
     //清空变量
     clearStore() {
+      this.token = "";
       this.userName = "";
       this.roles = [];
       this.activeMenu = "home";

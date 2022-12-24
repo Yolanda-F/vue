@@ -1,6 +1,6 @@
 export const userTableData = [
   {
-    prop: "name",
+    prop: "username",
     label: "用户名",
     // width: 150,
     isColumn: true, //是否展示为表格列
@@ -26,7 +26,7 @@ export const userTableData = [
     isColumn: true,
     isForm: true,
     type: "select",
-    required: true,
+    required: false,
     disabled: false,
     options: [],
   },
@@ -65,7 +65,7 @@ export const userTableData = [
     disabled: false,
   },
   {
-    prop: "department",
+    prop: "departmentId",
     label: "部门",
     // width: 400,
     isColumn: true,
