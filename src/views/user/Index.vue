@@ -46,7 +46,10 @@
             :key="item.prop"
           >
             <template #default="scope">
-              <span v-html="scope.row[item.prop]"></span>
+              <span v-if="item.prop == 'gender'">{{
+                getGenderLabel(scope.row[item.prop])
+              }}</span>
+              <span v-html="scope.row[item.prop]" v-else></span>
             </template>
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
@@ -93,23 +96,26 @@ import {
 import { ElMessageBox } from "element-plus";
 import OperationUser from "./OperationUser.vue";
 import { getUserListApi, findUserApi, deleteUsersApi } from "@/api/user";
+import { Gender } from "@/types/enum";
+import { highlightWord } from "@/components/index";
 
 let searchText = ref("");
 //当前行的数据，传递给FormCreate组件
-const currentRow = ref<User.UserData>({
+const currentRow = ref<UserType>({
   id: 0,
   username: "",
   date: "",
-  role: "",
-  gender: 0,
+  gender: Gender.male,
   phone: "",
   mail: "",
   departmentId: 0,
-  state: "",
+  state: "离线",
   password: "",
+  roleId: 0,
+  roleName: "",
 });
-let tableData = reactive<User.UserData[]>([]);
-let multipleSelection = reactive<User.UserData[]>([]);
+let tableData = reactive<UserType[]>([]);
+let multipleSelection = reactive<UserType[]>([]);
 //分页
 const currentPage = ref(1);
 const pageSize = ref(10);
@@ -121,24 +127,10 @@ const handleSearch = () => {
   findUserApi(searchText.value).then((res) => {
     tableData.length = 0;
     res.forEach((d) => {
-      d.username = highlightWord(d.username);
+      d.username = highlightWord(searchText.value, d.username);
       tableData.push(d);
     });
   });
-};
-//高亮内容
-const highlightWord = (value) => {
-  //如果包含搜索内容
-  if (searchText.value && value.indexOf(searchText.value) != -1) {
-    return value.replaceAll(
-      searchText.value,
-      `<span class="highlight-text">${searchText.value}</span>`
-    );
-  } else {
-    value = value.replaceAll(`<span class="highlight-text">`, "");
-    value = value.replaceAll(`</span>`, "");
-    return value;
-  }
 };
 //重置
 const handleReset = () => {
@@ -146,11 +138,13 @@ const handleReset = () => {
   getAllUser();
 };
 //选择行
-const handleSelectionChange = (val) => {
+const handleSelectionChange = (val: UserType[]) => {
+  console.log(val);
+  multipleSelection.length = 0;
   multipleSelection.push(...val);
 };
 //编辑用户
-const editUser = (row: User.UserData) => {
+const editUser = (row: UserType) => {
   currentRow.value = row;
   userRef.value.title = "编辑用户";
   userRef.value.dialogVisibile = true;
@@ -173,54 +167,58 @@ const addUser = () => {
 };
 //删除多个用户
 const handleDeleteUsers = () => {
-  ElMessageBox.confirm("确定删除选择的用户", "提示", {
-    cancelButtonText: "取消",
-    confirmButtonText: "确认",
-    closeOnClickModal: false,
-    closeOnPressEscape: false,
-    autofocus: false,
-    type: "warning",
-  }).then(() => {
-    let ids: number[] = [];
-    multipleSelection.forEach((user) => {
-      ids.push(user.id);
-    });
-    deleteUsers(ids);
+  let ids: number[] = [];
+  multipleSelection.forEach((user) => {
+    ids.push(user.id);
   });
+  deleteUsers(ids);
 };
 //删除一个用户
-const deleteUser = (row: User.UserData) => {
-  ElMessageBox.confirm("确定删除选择的用户", "提示", {
-    cancelButtonText: "取消",
-    confirmButtonText: "确认",
-    closeOnClickModal: false,
-    closeOnPressEscape: false,
-    autofocus: false,
-    type: "warning",
-  }).then(() => {
-    deleteUsers([row.id]);
-  });
+const deleteUser = (row: UserType) => {
+  deleteUsers([row.id]);
 };
 //删除用户
 const deleteUsers = (ids: number[]) => {
-  deleteUsersApi(ids).then(() => {
-    getAllUser();
+  ElMessageBox.confirm("确定删除选择的用户", "提示", {
+    cancelButtonText: "取消",
+    confirmButtonText: "确认",
+    closeOnClickModal: false,
+    closeOnPressEscape: false,
+    autofocus: false,
+    type: "warning",
+  }).then(() => {
+    deleteUsersApi(ids).then(() => {
+      getAllUser();
+    });
   });
 };
 //过滤出要展示的列
 const currentColumn = computed(() => {
   return userTableData.filter((column) => column.isColumn);
 });
+//区分在线或离线
+const isOnLine = (value: string) => {
+  let classname = value == "在线" ? "on-line" : "off-line";
+  return `<span class=${classname}>${value}</span>`;
+};
 //获取用户列表
 const getAllUser = () => {
   getUserListApi(currentPage.value - 1, pageSize.value).then((res) => {
     tableData.length = 0;
     res.content.forEach((r) => {
-      r.username = highlightWord(r.username);
+      r.username = highlightWord(searchText.value, r.username);
+      r.state = isOnLine(r.state); //标识在线或离线
       tableData.push(r);
     });
     total.value = res.totalElements; //记录总数量
   });
+};
+//获取性别label
+const getGenderLabel = (gender) => {
+  if (gender == Gender.male) {
+    return "男";
+  }
+  return "女";
 };
 
 onMounted(() => {
@@ -239,5 +237,11 @@ provide("getAllUser", getAllUser); //提供给子组件
 }
 :deep(.highlight-text) {
   background-color: yellow;
+}
+:deep(.on-line) {
+  color: var(--el-color-success);
+}
+:deep(.off-line) {
+  color: var(--el-color-info);
 }
 </style>

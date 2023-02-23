@@ -1,7 +1,7 @@
 //角色列
-export const roleTableData = [
+export const roleTableData: Form.FormType[] = [
   {
-    prop: "name",
+    prop: "roleName",
     label: "角色名称",
     isColumn: true, //是否展示为表格列
     isForm: true, //是否展示为表单项
@@ -18,15 +18,15 @@ export const roleTableData = [
     required: true,
     disabled: false,
   },
-  {
-    prop: "permission",
-    label: "权限",
-    isColumn: false,
-    isForm: false,
-    type: "input",
-    required: false,
-    disabled: false,
-  },
+  // {
+  //   prop: "permission",
+  //   label: "权限",
+  //   isColumn: false,
+  //   isForm: false,
+  //   type: "input",
+  //   required: false,
+  //   disabled: false,
+  // },
   {
     prop: "date",
     label: "创建日期",
@@ -38,7 +38,7 @@ export const roleTableData = [
   },
 ];
 //菜单权限数据
-export const MenuList = [
+export const MenuList: PermissionType[] = [
   {
     id: "system",
     label: "系统管理",

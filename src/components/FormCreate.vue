@@ -16,7 +16,7 @@
     >
       <!-- input类型 -->
       <el-input
-        v-if="column.type == 'input'"
+        v-if="['input', 'phone', 'mail'].includes(column.type)"
         v-model="formData[column.prop]"
         :disabled="column.disabled"
       />
@@ -113,6 +113,20 @@ const getRules = () => {
         required: true,
         message: `${column.label}不可为空`,
         trigger: "change",
+      });
+    }
+    //电话格式
+    if (column.type == "phone") {
+      rules[column.prop].push({
+        pattern: /^(13[0-9]|14[0-9]|15[0-9]|166|17[0-9]|18[0-9]|19[8|9])\d{8}$/,
+        message: "手机号格式不正确",
+      });
+    }
+    if (column.type == "mail") {
+      rules[column.prop].push({
+        pattern:
+          /^[A-Za-z0-9-._]+@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,6})$/,
+        message: "邮箱地址格式不正确",
       });
     }
   });

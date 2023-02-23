@@ -21,23 +21,31 @@
 </template>
 
 <script setup>
-import { ref, defineExpose, provide } from "vue";
+import { ref, defineExpose, provide, inject } from "vue";
 import { roleTableData } from "@/utill/role";
 import FormCreate from "@/components/FormCreate.vue";
+import { addRoleApi } from "@/api/role";
 
+let getRoleList = inject("getRoleList");
 let dialogVisibile = ref(false);
 let formRef = ref();
 let title = ref("");
 
 //关闭弹窗
 const handleClose = () => {
+  formRef.value.handleReset();
   dialogVisibile.value = false;
 };
 //确认
 const handleSubmit = () => {
   formRef.value.formDataRef.validate((valid) => {
     if (valid) {
-      console.log(formRef.value.formData);
+      let formData = formRef.value.formData;
+      console.log(formData);
+      addRoleApi(formData).then(() => {
+        getRoleList();
+        handleClose();
+      });
     } else {
       return false;
     }

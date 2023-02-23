@@ -1,4 +1,6 @@
-export const userTableData = [
+import { Gender } from "@/types/enum";
+
+export const userTableData: Form.FormType[] = [
   {
     prop: "username",
     label: "用户名",
@@ -20,11 +22,22 @@ export const userTableData = [
     disabled: true,
   },
   {
-    prop: "role",
+    prop: "roleId",
+    label: "角色",
+    // width: 120,
+    isColumn: false,
+    isForm: true,
+    type: "select",
+    required: false,
+    disabled: false,
+    options: [],
+  },
+  {
+    prop: "roleName",
     label: "角色",
     // width: 120,
     isColumn: true,
-    isForm: true,
+    isForm: false,
     type: "select",
     required: false,
     disabled: false,
@@ -37,20 +50,20 @@ export const userTableData = [
     isColumn: true,
     isForm: true,
     type: "radio",
-    required: false,
+    required: true,
     disabled: false,
     options: [
-      { label: "1", name: "男" },
-      { label: "0", name: "女" },
+      { label: Gender.male, name: "男" },
+      { label: Gender.female, name: "女" },
     ],
   },
   {
     prop: "phone",
-    label: "电话",
+    label: "手机号",
     // width: 120,
     isColumn: true,
     isForm: true,
-    type: "input",
+    type: "phone",
     required: false,
     disabled: false,
   },
@@ -60,7 +73,7 @@ export const userTableData = [
     // width: 150,
     isColumn: true,
     isForm: true,
-    type: "input",
+    type: "mail",
     required: false,
     disabled: false,
   },
@@ -71,7 +84,7 @@ export const userTableData = [
     isColumn: true,
     isForm: true,
     type: "select",
-    defaultValue: "",
+    required: false,
     disabled: false,
   },
   {

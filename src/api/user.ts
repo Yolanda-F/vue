@@ -13,7 +13,7 @@ enum URL {
  * @param data 用户信息
  * @returns
  */
-export const addUserApi = (data: User.UserData) =>
+export const addUserApi = (data: UserType) =>
   post<any>({ url: URL.addUser, data });
 /**
  * 获取用户列表
@@ -43,5 +43,5 @@ export const deleteUsersApi = (data: number[]) =>
  * @param data
  * @returns
  */
-export const updateUserApi = (data: User.UserData) =>
+export const updateUserApi = (data: UserType) =>
   post<any>({ url: URL.updateUser, data });

@@ -7,7 +7,9 @@
         placeholder="请输入角色名称"
         :prefix-icon="Search"
       />
-      <el-button type="primary" :icon="Search">搜索</el-button>
+      <el-button type="primary" :icon="Search" @click="handleSearch"
+        >搜索</el-button
+      >
       <el-button type="warning" :icon="RefreshRight" @click="handleReset"
         >重置</el-button
       >
@@ -84,10 +86,7 @@
             <template #header>
               <div class="card-header">
                 <span>菜单分配</span>
-                <el-button
-                  type="primary"
-                  :icon="Select"
-                  :disabled="currentRow == ''"
+                <el-button type="primary" :icon="Select" :disabled="currentRow"
                   >保存</el-button
                 >
               </div>
@@ -107,7 +106,7 @@
   <CreateRole ref="roleRef"></CreateRole>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, reactive, ref, provide, computed } from "vue";
 import { roleTableData, MenuList } from "@/utill/role";
 import {
@@ -120,47 +119,81 @@ import {
 } from "@element-plus/icons-vue";
 import { ElMessageBox } from "element-plus";
 import CreateRole from "./CreateRole.vue";
+import { getRoleListApi, findRoleNameApi, deleteRoleApi } from "@/api/role";
+import { highlightWord } from "@/components/index";
 
 let searchText = ref("");
-let tableData = reactive([]);
-const multipleSelection = ref([]);
+let tableData = reactive<RoleType[]>([]);
+const multipleSelection = reactive<RoleType[]>([]);
 //分页
 const currentPage = ref(1);
 const pageSize = ref(10);
 let total = ref(1);
-let checkedMenu = reactive([]); //选中的菜单列表
-let currentRow = ref(""); //点击行
+let checkedMenu = reactive<number[]>([]); //选中的菜单列表
+let currentRow = ref<RoleType>({
+  id: 0,
+  roleName: "",
+  date: "",
+  level: 0,
+}); //当前行
 let roleRef = ref();
-let formData = ref({}); //要展示的数据
-provide("formData", formData); //提供给孙组件
 
+//搜索
+const handleSearch = () => {
+  findRoleNameApi(searchText.value).then((res) => {
+    tableData.length = 0;
+    res.forEach((d) => {
+      d.roleName = highlightWord(searchText.value, d.roleName);
+      tableData.push(d);
+    });
+  });
+};
+//重置
+const handleReset = () => {
+  searchText.value = "";
+  getRoleList();
+};
 //创建角色
 const handleCreateRole = () => {
-  formData.value = {};
-  formData.value.date = new Date();
+  currentRow.value.date = new Date().toLocaleString().replaceAll("/", "-");
   roleRef.value.title = "新建角色";
   roleRef.value.dialogVisibile = true; //子组件对话框出现
 };
 //选择行
-const handleSelectionChange = (val) => {
-  multipleSelection.value = val;
+const handleSelectionChange = (val: RoleType[]) => {
+  multipleSelection.length = 0;
+  multipleSelection.push(...val);
 };
 //编辑操作
-const handleEdit = (row) => {
-  formData.value = row;
+const handleEdit = (row: RoleType) => {
+  currentRow.value = row;
   roleRef.value.title = "编辑角色";
   roleRef.value.dialogVisibile = true; //子组件对话框出现
 };
 //改变页数量
-const handleSizeChange = (val) => {
-  console.log(`${val} items per page`);
+const handleSizeChange = (val: number) => {
+  pageSize.value = val;
+  getRoleList();
 };
 //改变当前页
-const handleCurrentChange = (val) => {
-  console.log(`current page: ${val}`);
+const handleCurrentChange = (val: number) => {
+  currentPage.value = val;
+  getRoleList();
 };
 //多选删除
 const handleDeleteRoles = () => {
+  let ids: number[] = [];
+  multipleSelection.forEach((role) => {
+    ids.push(role.id);
+  });
+  deleteRole(ids);
+};
+//单选删除
+const handleDelete = (row: RoleType) => {
+  deleteRole([row.id]);
+};
+//删除角色
+const deleteRole = (ids: number[]) => {
   ElMessageBox.confirm("确定删除选择的角色", "提示", {
     cancelButtonText: "取消",
     confirmButtonText: "确认",
@@ -169,39 +202,33 @@ const handleDeleteRoles = () => {
     autofocus: false,
     type: "warning",
   }).then(() => {
-    console.log(multipleSelection.value);
+    deleteRoleApi(ids).then(() => {
+      getRoleList();
+    });
   });
-};
-//表格内的删除按钮
-const handleDelete = (row) => {
-  console.log(row);
 };
 //勾选菜单列表
 const handleCheck = (node, state) => {
-  let checkedKeys = [...state.checkedKeys, ...state.halfCheckedKeys]; //选中的节点key值
+  let checkedKeys: number[] = [...state.checkedKeys, ...state.halfCheckedKeys]; //选中的节点key值
   checkedMenu.length = 0;
   checkedMenu.push(...checkedKeys);
   console.log("----菜单权限---", checkedMenu);
 };
 //点击某一行，展示该角色的菜单权限
-const handleRowClick = (row) => {
-  currentRow.value = row;
+const handleRowClick = (row: RoleType) => {
+  // currentRow.value = row;
   console.log(row);
 };
 //获取表格数据
 const getRoleList = () => {
   tableData.length = 0;
-  for (let i = 0; i < 1; i++) {
-    tableData.push({
-      date: "2016-05-03",
-      name: "Tom",
+  getRoleListApi(currentPage.value - 1, pageSize.value).then((res) => {
+    res.content.forEach((r) => {
+      r.roleName = highlightWord(searchText.value, r.roleName);
+      tableData.push(r);
     });
-  }
-  total.value = tableData.length;
-};
-//重置
-const handleReset = () => {
-  console.log("reset");
+    total.value = res.totalElements; //记录总数量
+  });
 };
 //过滤出要展示的列
 const currentColumn = computed(() => {
@@ -210,6 +237,9 @@ const currentColumn = computed(() => {
 onMounted(() => {
   getRoleList();
 });
+
+provide("formData", currentRow); //提供给孙组件
+provide("getRoleList", getRoleList); //提供给子组件
 </script>
 <style scoped lang="less">
 .el-input {
